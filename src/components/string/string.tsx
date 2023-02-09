@@ -84,16 +84,54 @@ export const StringComponent: FC = () => {
   }
 
   const containsDuplicate = (nums: number[]): boolean => {
-    const uniques = {};
-    for(let i = 0; i <= nums.length; i++) {
-      
-    }
+    
+    // let t = nums.splice(0);
+    // console.log(t);
+    console.log(nums);
 
+    for(let i = 0; i < nums.length; i++) {
+      let uniques = nums[i];
+      let nums2 = nums.slice();
+      nums2.splice(i, 1);
+      console.log('nums2 = ', nums2);
+      for(let x = 0; x < nums2.length; x++) {
+        console.log('uniques = ', uniques);
+        console.log("nums2 element=", nums2[x]);
+        if(nums2[x] == uniques) {
+          console.log("true");
+          return true;
+        }
+      }
+      // console.log('nums[i] = ', nums[i]); 
+      // console.log('uniques = ', uniques);    
+    }
+    console.log("false");
     return false;
   };
 
-  containsDuplicate([1,20,1,33,44,66,71]); 
+  // containsDuplicate([3,3,20,33,1,44,66,200,71,13]); 
 
+  const swap = (arr: number[], firstIndex: number, secondIndex: number): void => {
+    const temp = arr[firstIndex];
+    arr[firstIndex] = arr[secondIndex];
+    arr[secondIndex] = temp;
+  };
+  
+  const selectionSort = (arr: number[]) => {
+    const { length } = arr;
+    for (let i = 0; i < length - 1; i++) {
+      let maxInd = i;
+      for (let x = 0; x < length - 1; x++) {
+        if(arr[maxInd] > arr[x]) {
+          swap(arr, maxInd, x);
+        }
+      }
+      // ...
+    }
+    return arr;
+  };
+
+  selectionSort([20,1,7]);
 
   useEffect(() => {
     // console.log("Answer = ",constComplexity(3, 5));
