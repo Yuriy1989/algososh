@@ -121,17 +121,21 @@ export const StringComponent: FC = () => {
     const { length } = arr;
     for (let i = 0; i < length - 1; i++) {
       let maxInd = i;
-      for (let x = 0; x < length - 1; x++) {
-        if(arr[maxInd] > arr[x]) {
-          swap(arr, maxInd, x);
+      for (let j = i+1; j < length; j++) {
+        if(arr[maxInd] < arr[j]) {
+          console.log("arr", arr, "arr length =", length, "maxInd = ", maxInd, "arr[maxInd] = ", arr[maxInd], "arr[j] = ", arr[j]);
+          maxInd=j;
         }
       }
-      // ...
+      if(maxInd != i){
+        swap(arr, maxInd, i);
+      }
     }
+    console.log("arr = ", arr);
     return arr;
   };
 
-  selectionSort([20,1,7]);
+  selectionSort([0,20,1,7,6,123,8,6]);
 
   useEffect(() => {
     // console.log("Answer = ",constComplexity(3, 5));
