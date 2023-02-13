@@ -38,10 +38,31 @@ export const StackPage: React.FC = () => {
   st.push("как");
   st.push("сам?");
   st.pop();
-  console.log(st.peak()); // как
+  // console.log(st.peak()); // как
   st.push("дела?");
-  console.log(st.peak()); // дела?
+  // console.log(st.peak()); // дела?
 
+
+  const isValid = (str: string): boolean => {
+    let arrayX = [];
+    let arrayY = [];
+    let start = 0;
+    let end = str.length - 1;
+    while(start <= end) {
+      if (str[start] === "(") {
+        arrayX.push('(');
+      } else {
+        arrayY.push('(');
+      }
+      start++;
+    }
+    console.log("arrayY", arrayY, "arrayX", arrayX);
+    if(arrayX.length === arrayY.length) {
+      return true
+    } else return false;
+  };
+
+  console.log(isValid("()()"));
 
   return (
     <SolutionLayout title="Стек">
