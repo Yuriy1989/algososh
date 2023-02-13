@@ -294,7 +294,6 @@ export const StringComponent: FC = () => {
       if(nums[start] === 0) {
         if(curr === 0) {
           [nums[end-1], nums[start]] = [nums[start], nums[end-1]];
-          // swap(nums, start, end-1);
           end--;
         } else {
           [nums[end], nums[start]] = [nums[start], nums[end]];
@@ -307,6 +306,9 @@ export const StringComponent: FC = () => {
     }
     return nums;
   };
+
+  // console.log(moveZeroes([0,2,1,0,7,0,0,0]));
+  // console.log(moveZeroes([4,2,4,0,0,3,0,5,1,0]));
 
   //   const moveZeroes = (nums: number[]): number[] => {
   //   let start = 0;
@@ -322,7 +324,7 @@ export const StringComponent: FC = () => {
   //   return nums;
   // };
 
-  // console.log(moveZeroes([0,2,1,0,7,0,0,0]));
+  
   // console.log(moveZeroes([0, 134, 0, 1, 0, 3, 12, 0]));
 
   const transactions: ITransaction[] = [
@@ -354,35 +356,35 @@ interface IGroup {
     group: ITransaction[];
   }
 
-const groupByDate = (transactions: ITransaction[]): Record<string, IGroup> => {
-  const groups: Record<string, IGroup> = {};
-  console.log("groups ====", groups);
+// const groupByDate = (transactions: ITransaction[]): Record<string, IGroup> => {
+//   const groups: Record<string, IGroup> = {};
+//   console.log("groups ====", groups);
 
-  const groups.reduce() 
+//   const groups.reduce() 
 
-  transactions.forEach(transaction => {
-    const { date, amount } = transaction;
-    console.log("groups", groups);
-    if (date in groups) {
-      // добавляем значение в группу
-      const group = [...groups[date].group, transaction];
-      console.log("group", group);
-      groups[date] = {
-        group,
-        amount: group.reduce((acc, { amount: amountNext }) => acc + amountNext, 0)
-      };
-    } else {
-      // создаем новое значение в группе
-      groups[date] = {
-        group: [transaction],
-        amount
-      };
-    }
-  });
-  return groups;
-};
+//   transactions.forEach(transaction => {
+//     const { date, amount } = transaction;
+//     console.log("groups", groups);
+//     if (date in groups) {
+//       // добавляем значение в группу
+//       const group = [...groups[date].group, transaction];
+//       console.log("group", group);
+//       groups[date] = {
+//         group,
+//         amount: group.reduce((acc, { amount: amountNext }) => acc + amountNext, 0)
+//       };
+//     } else {
+//       // создаем новое значение в группе
+//       groups[date] = {
+//         group: [transaction],
+//         amount
+//       };
+//     }
+//   });
+//   return groups;
+// };
 
-console.log(groupByDate(transactions));
+// console.log(groupByDate(transactions));
 
   useEffect(() => {
     // console.log("Answer = ",constComplexity(3, 5));
