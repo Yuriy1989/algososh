@@ -3,123 +3,6 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 
 export const ListPage: React.FC = () => {
 
-  // class Node<T> {
-  //   value: T
-  //   next: Node<T> | null
-  //   constructor(value: T, next?: Node<T> | null) {
-  //     this.value = value;
-  //     this.next = (next === undefined ? null : next);
-  //   }
-  // }
-  
-  // interface ILinkedList<T> {
-  //   append: (element: T) => void;
-  //   getSize: () => number;
-  //   print: () => void;
-  // }
-  
-  // class LinkedList<T> implements ILinkedList<T> {
-  //   private head: Node<T> | null;
-  //   private size: number;
-  //   constructor() {
-  //     this.head = null;
-  //     this.size = 0;
-  //   }
-  
-  //   append(element: T) {
-  //     console.log("element = ", element);
-  //     const node = new Node(element);
-      
-  //     if (this.size === 0) {
-  //       this.head = node; 
-  //   } else {
-  //       let current = this.head;
-  //       console.log("node = ", node, "this.size = ", this.size, "this.head = ", this.head,"current = ", current, "node.next = ", node.next);
-  //       while(current?.next) {
-  //           current = current.next;
-  //       }
-
-  //       if(current) {
-  //         current.next = new Node(element);
-  //       }
-  //   }
-  //     this.size++;
-  //   }
-  
-  //   getSize() {
-  //     return this.size;
-  //   }
-  
-  //   print() {
-  //     let curr = this.head;
-  //     let res = '';
-  //     while (curr) {
-  //       res += `${curr.value} `;
-  //       curr = curr.next;
-  //     }
-  //     console.log(res);
-  //   }
-  // }
-  
-  // const list = new LinkedList<number>();
-  // list.append(12);
-  // list.append(13);
-  // list.append(14);
-  // list.print(); // 12 13 14
-
-  interface IStack<T> {
-    push: (item: T) => void;
-    pop: () => void;
-    peak: () => T | null;
-  }
-  
-  class Node<T> {
-    value: T;
-    next: Node<T> | null;
-    constructor(value: T, next?: Node<T> | null) {
-      this.value = value;
-      this.next = next === undefined ? null : next;
-    }
-  }
-  
-  class Stack<T> implements IStack<T> {
-    private top: Node<T> | null = null;
-  
-    constructor(node: Node<T>) {
-      this.top = node;
-    }
-    push = (item: T): void => {
-      // Ваш код
-    };
-  
-    pop = (): void => {
-      if (this.isEmpty()) {
-        throw new Error("stack is empty");
-      }
-      // Ваш код
-    };
-  
-    peak = (): T | null => {
-      if (this.isEmpty()) {
-        throw new Error("stack is empty");
-      }
-      return this.top?.value || null;
-    };
-  
-    isEmpty = (): boolean => {
-      return this.top === null;
-    };
-  }
-  
-  const st = new Stack<string>(new Node("Йоу!"));
-  st.push("как");
-  st.push("сам?");
-  st.pop();
-  console.log(st.peak()); // как
-  st.push("дела?");
-  console.log(st.peak()); // дела?
-
-
   class Node<T> {
     value: T
     next: Node<T> | null
@@ -131,6 +14,7 @@ export const ListPage: React.FC = () => {
   
   interface ILinkedList<T> {
     append: (element: T) => void;
+    insertAt: (element: T, position: number) => void;
     getSize: () => number;
     print: () => void;
   }
@@ -143,21 +27,46 @@ export const ListPage: React.FC = () => {
       this.size = 0;
     }
   
+    insertAt(element: T, index: number) {
+      if (index < 0 || index > this.size) {
+        console.log('Enter a valid index');
+        return;
+      } else {
+        const node = new Node(element);
+  
+        // добавить элемент в начало списка
+        if (index === 0) {
+          // ваш код ...
+        } else {
+          let curr = this.head;
+          let currIndex = 0;
+  
+          // перебрать элементы в списке до нужной позиции
+          // ваш код ...
+  
+          // добавить элемент
+          // ваш код ...
+          console.log("node = ", node, "this.size = ", this.size, "this.head = ", this.head, "node.next = ", node.next);
+        }
+  
+        this.size++;
+      }
+    }
+  
     append(element: T) {
       const node = new Node(element);
-      let curr = this.head;
-
-      while(curr?.next) {
-        if(curr.next === null){
-          curr=node;
+      let current;
+  
+      if (this.head === null) {
+        this.head = node;
+      } else {
+        current = this.head;
+        while (current.next) {
+          current = current.next;
         }
-      };
-      console.log("node.head = ",this.head, "node.value = ",node.value, "node.next = ",node.next);
-      console.log();
-      // ваш код
-      // for(let i = 0; i < this.size; i++){
-      //   ifnode.next = element;
-      // }
+  
+        current.next = node;
+      }
       this.size++;
     }
   
@@ -177,10 +86,10 @@ export const ListPage: React.FC = () => {
   }
   
   const list = new LinkedList<number>();
-  list.append(12);
-  list.append(13);
-  list.append(14);
-  list.print(); // 12 13 14
+  console.log(list.insertAt(12, 0));
+  list.insertAt(13, 0);
+  list.insertAt(114, 1);
+  list.print(); // 13 114 12   
 
   return (
     <SolutionLayout title="Связный список">
