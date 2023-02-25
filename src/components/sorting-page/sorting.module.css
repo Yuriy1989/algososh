@@ -1,4 +1,4 @@
-.fibonacci {
+.sorting {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,10 +15,33 @@
 
 .input {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
-  width: 377px;
+  align-items: baseline;
+}
+
+.radioInput {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.radioInput_margin {
+  margin-right: 40px;
+}
+
+.button {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.mr12 {
   margin-right: 12px;
+}
+
+.mr80 {
+  margin-right: 80px;
 }
 
 .circle {

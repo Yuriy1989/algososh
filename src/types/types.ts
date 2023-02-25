@@ -4,3 +4,8 @@ export interface ISteps {
   modified?: Array<number>,
   default?: Array<number>,
 }
+
+export enum checkedRadio {
+  Choice = "choice",
+  Bubble = "bubble",
+}

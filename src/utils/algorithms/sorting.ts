@@ -1,5 +1,8 @@
-export const fibonacciAlg = (num: number): Array<number> => {
+export const sortingAlg = (num: number): Array<number> => {
   let arr: Array<number> = [1, 1];
+  if(!Number(num)) {
+    return arr = [0];
+  }
 
   if(Number(num) === 1) {
     return arr;

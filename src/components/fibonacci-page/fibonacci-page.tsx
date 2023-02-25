@@ -10,11 +10,11 @@ import { fibonacciAlg } from '../../utils/algorithms/fibonacci';
 
 export const FibonacciPage: React.FC = () => {
 
-  const {values, handleChange} = useForm({numbers: ''});
+  const {values, handleChange} = useForm({numbers: 0});
   const [list, setList] = useState<Array<number> | null>(null);
   const [steps, setSteps] = useState<number>(0);
   const [button, setButton] = useState<boolean>(false);
-  const [numb, setNumb] = useState<Array<string>>([]);
+  const [numb, setNumb] = useState<Array<number>>([]);
 
   const handleClick = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -36,16 +36,10 @@ export const FibonacciPage: React.FC = () => {
     setTimeout(() => {
       setSteps(steps+1);
       if(list){
-        console.log("list", list.length);
         setNumb(list.slice(0, steps));
       }
     }, 500);
   }, [steps, list])
-
-  if(list) {
-    console.log(list);
-    console.log("numb", numb);
-  }
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
@@ -57,7 +51,8 @@ export const FibonacciPage: React.FC = () => {
               onChange={handleChange}
               value={`${values?.numbers}`}
               max={19}
-              // pattern={`\d[0-9]`}
+              type={'number'}
+              pattern={`[1]-[19]`}
             />
             <span>Максимальное число - 19</span>
           </div>
@@ -67,7 +62,7 @@ export const FibonacciPage: React.FC = () => {
           <div className={fibonacci.circle}>
             {
               numb.map((item, index) => {
-                return <Circle state={ElementStates.Default} letter={item} key={index} index={index} />
+                return <Circle state={ElementStates.Default} letter={`${item}`} key={index} index={index} />
               })
             }
           </div>
