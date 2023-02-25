@@ -1,4 +1,3 @@
-import { ElementStates } from "../../types/element-states";
 import { ISteps } from "../../types/types";
 
   export const permutation = (sortingArray: string[]): Array<ISteps> => {
@@ -8,29 +7,36 @@ import { ISteps } from "../../types/types";
     steps.push({
         mas: [...sortingArray],
       });
-    while(start < end) {
+
+    let mod = []; //прошедшие сортировку
+    while(start <= end) {
+      let chan = []; //сортируемые
+      chan.push(start);
+      chan.push(end);
+
+      steps.push({
+        mas: [...sortingArray],
+        changing: [...chan],
+        modified: [...mod],
+      })
+
       let temp = sortingArray[end];
       sortingArray[end] = sortingArray[start];
       sortingArray[start] = temp;
-      let mod = [];
+
       mod.push(start);
       mod.push(end);
-      steps.push({
-        mas: [...sortingArray],
-        index: mod,
-        state: ElementStates.Changing,
-      })
-      steps.push({
-        mas: [...sortingArray],
-        index: mod,
-        state: ElementStates.Modified,
-      })
+      chan = [];
+      chan.push(start+1);
+      chan.push(end-1);
+
       end--;
       start++;
     }
+    // mod.push(start);
     steps.push({
       mas: [...sortingArray],
-      state: ElementStates.Changing,
+      modified: [...mod],
     });
     return steps;
   }

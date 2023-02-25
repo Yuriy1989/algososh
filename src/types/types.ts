@@ -1,7 +1,6 @@
-import { ElementStates } from './element-states';
-
 export interface ISteps {
   mas: Array<string>,
-  index?: Array<number>,
-  state?: ElementStates,
+  changing?: Array<number>,
+  modified?: Array<number>,
+  default?: Array<number>,
 }

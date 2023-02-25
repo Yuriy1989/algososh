@@ -2,6 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 
 export interface IInputValues {
   text?: string;
+  numbers?: number | string | null;
   buttonActive?: boolean;
 }
 
