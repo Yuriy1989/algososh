@@ -1,18 +1,63 @@
-export const sortingAlg = (num: number): Array<number> => {
-  let arr: Array<number> = [1, 1];
-  if(!Number(num)) {
-    return arr = [0];
-  }
+import { checkedRadio } from "../../types/types";
 
-  if(Number(num) === 1) {
-    return arr;
-  }
+export const sortingArray = (arr: Array<number>, typeSorting: checkedRadio, minmax: string): Array<number> => {
 
-  if(num > 1) {
-    for(let i = 2; i <= num; i++){
-      arr.push(arr[i-2] + arr[i-1]);
+  let newArr: Array<number> = [];
+  if (typeSorting === checkedRadio.Choice) {
+    newArr = choiceMin(arr, minmax);
+  } else {
+    newArr = bubbleMin(arr, minmax);
+  }
+  return newArr;
+}
+
+const swap = (arr: number[], firstIndex: number, secondIndex: number): void => {
+  const temp = arr[firstIndex];
+  arr[firstIndex] = arr[secondIndex];
+  arr[secondIndex] = temp;
+};
+
+const bubbleMin = (arr: Array<number>, minmax: string): Array<number>=> {
+  for (let j = arr.length - 1; j > 0; j--) {
+    for (let i = 0; i < j; i++) {
+      if(minmax === "По возрастанию") {
+        if (arr[i] > arr[i + 1]) {
+          let temp = arr[i];
+          arr[i] = arr[i + 1];
+          arr[i + 1] = temp;
+        }
+      } else {
+        if (arr[i] < arr[i + 1]) {
+          let temp = arr[i];
+          arr[i] = arr[i + 1];
+          arr[i + 1] = temp;
+        }
+      }
     }
-    return arr;
   }
   return arr;
-};
+}
+
+const choiceMin = (arr: Array<number>, minmax: string): Array<number> => {
+  const { length } = arr;
+  for (let i = 0; i < length - 1; i++) {
+    let maxInd = i;
+    for (let j = i+1; j < length; j++) {
+      if(minmax === "По возрастанию") {
+        if(arr[maxInd] < arr[j]) {
+          console.log("arr", arr, "arr length =", length, "maxInd = ", maxInd, "arr[maxInd] = ", arr[maxInd], "arr[j] = ", arr[j]);
+          maxInd=j;
+        }
+      } else {
+        if(arr[maxInd] > arr[j]) {
+          console.log("arr", arr, "arr length =", length, "maxInd = ", maxInd, "arr[maxInd] = ", arr[maxInd], "arr[j] = ", arr[j]);
+          maxInd=j;
+        }
+      }
+    }
+    if(maxInd != i){
+      swap(arr, maxInd, i);
+    }
+  }
+  return arr;
+}

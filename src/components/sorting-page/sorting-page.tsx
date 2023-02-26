@@ -2,39 +2,43 @@ import React, { useEffect, useState } from "react";
 import { ElementStates } from "../../types/element-states";
 import { useForm } from "../../utils/hooks";
 import { Button } from "../ui/button/button";
-import { Circle } from "../ui/circle/circle";
-import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
-import { sortingAlg } from '../../utils/algorithms/sorting';
+import { sortingArray } from '../../utils/algorithms/sorting';
 import sorting from './sorting.module.css';
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Direction } from "../../types/direction";
 import { RandomArr } from '../../utils/random';
 import { checkedRadio } from '../../types/types';
+import { Column } from '../ui/column/column';
 
 export const SortingPage: React.FC = () => {
 
-  const {values, handleChange} = useForm({check: checkedRadio.Choice});
+  const {values, setValues} = useForm({check: checkedRadio.Choice});
   const [list, setList] = useState<Array<number> | null>(null);
   const [steps, setSteps] = useState<number>(0);
   const [button, setButton] = useState<boolean>(false);
   const [numb, setNumb] = useState<Array<number>>([]);
-  // const [checked, setChecked] = useState("choice");
+
+  const onButtonActive = (e: {
+    target: any; preventDefault: () => void;
+  }) => {
+    const { value } = e.target;
+    setValues({ check: value });
+  }
 
   const handleClick = (e: {
     target: any; preventDefault: () => void;
 }) => {
     e.preventDefault();
-    console.log("e", e);
-    console.log("values.numbers", values.numbers);
-    // setChecked(e.target.value);
-    // if(values.numbers) {
       setList(null);
       setSteps(0);
-      // setButton(true);
-      console.log(RandomArr());
-      // setList(sortingAlg());
-    // }
+      setList(RandomArr());
+  }
+
+  const handleClickSorting = (e: any) => {
+    if(list && values.check) {
+      console.log(sortingArray(list, values.check, e.target.innerText));
+    }
   }
 
   useEffect(() => {
@@ -49,8 +53,12 @@ export const SortingPage: React.FC = () => {
       if(list){
         setNumb(list.slice(0, steps));
       }
-    }, 500);
+    }, 1000);
   }, [steps, list])
+
+  useEffect(() => {
+    setList(RandomArr());
+  }, [])
 
   return (
     <SolutionLayout title="Сортировка массива">
@@ -58,22 +66,22 @@ export const SortingPage: React.FC = () => {
         <form className={sorting.form} onSubmit={handleClick}>
           <div className={sorting.input}>
             <div className={sorting.radioInput}>
-              <RadioInput onChange={handleChange} checked={values.check == checkedRadio.Choice ? true : false} label="Выбор" value="choice" name="sort" extraClass={`${sorting.radioInput_margin}`}/>
-              <RadioInput onChange={handleChange} checked={values.check == checkedRadio.Bubble ? true : false} label="Пузырёк" value="bubble" name="sort" extraClass={`${sorting.radioInput_margin}`}/>
+              <RadioInput onChange={onButtonActive} checked={values.check == checkedRadio.Choice ? true : false} label="Выбор" value="choice" name="sort" extraClass={`${sorting.radioInput_margin}`}/>
+              <RadioInput onChange={onButtonActive} checked={values.check == checkedRadio.Bubble ? true : false} label="Пузырёк" value="bubble" name="sort" extraClass={`${sorting.radioInput_margin}`}/>
             </div>
             <div className={sorting.button}>
-              <Button isLoader={button} type="button" text="По возрастанию" sorting={Direction.Ascending} extraClass={`${sorting.mr12}`}/>
-              <Button isLoader={button} type="button" text="По убыванию" sorting={Direction.Descending} extraClass={`${sorting.mr80}`}/>
+              <Button onClick={handleClickSorting} name="max" isLoader={button} type="button" text="По возрастанию" sorting={Direction.Ascending} extraClass={`${sorting.mr12}`}/>
+              <Button onClick={handleClickSorting} name="min" isLoader={button} type="button" text="По убыванию" sorting={Direction.Descending} extraClass={`${sorting.mr80}`}/>
             </div>
             <Button isLoader={button} type="submit" text="Новый массив" />
           </div>
         </form>
         {list &&
-          <div className={sorting.circle}>
+          <div className={sorting.columns}>
             {
-              // numb.map((item, index) => {
-              //   return <Circle state={ElementStates.Default} letter={`${item}`} key={index} index={index} />
-              // })
+              list.map((item, index) => {
+                return <Column key={index} index={item} />
+              })
             }
           </div>
         }
