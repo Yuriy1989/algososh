@@ -28,3 +28,9 @@ export interface IStack<T> {
   peak: () => T | null;
   getSize: () => number;
 }
+
+export interface IStackSteps<T> {
+  mas: Array<T>,
+  changing?: Array<number>,
+  modified?: Array<number>,
+}
