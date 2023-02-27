@@ -1,6 +1,6 @@
 import { ISteps } from "../../types/types";
 
-  export const permutation = (sortingArray: string[]): Array<ISteps> => {
+  export const permutation = (sortingArray: Array<string>): Array<ISteps> => {
     let start: number = 0;
     let end: number = sortingArray.length-1;
     let steps: Array<ISteps> = [];
@@ -13,7 +13,6 @@ import { ISteps } from "../../types/types";
       let chan = []; //сортируемые
       chan.push(start);
       chan.push(end);
-
       steps.push({
         mas: [...sortingArray],
         changing: [...chan],
@@ -33,7 +32,6 @@ import { ISteps } from "../../types/types";
       end--;
       start++;
     }
-    // mod.push(start);
     steps.push({
       mas: [...sortingArray],
       modified: [...mod],

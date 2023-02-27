@@ -5,7 +5,26 @@ export interface ISteps {
   default?: Array<number>,
 }
 
+export interface IStepsSorting {
+  mas: Array<number>,
+  changing?: Array<number>,
+  modified?: Array<number>,
+  default?: Array<number>,
+}
+
 export enum checkedRadio {
   Choice = "choice",
   Bubble = "bubble",
+}
+
+export interface IButton {
+  active: boolean,
+  textbutton : string,
+}
+
+export interface IStack<T> {
+  push: (item: T) => void;
+  pop: () => void;
+  peak: () => T | null;
+  getSize: () => number;
 }

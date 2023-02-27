@@ -38,10 +38,6 @@ export const StringComponent: FC = () => {
     }, 1000);
   }, [steps, list])
 
-  if(list) {
-    console.log(list);
-  }
-
   return (
     <SolutionLayout title="Строка">
       <div className={string.string}>
@@ -54,7 +50,7 @@ export const StringComponent: FC = () => {
               placeholder={'Введите текст'}
               maxLength={11}
             />
-            <span>максимум 11-символов</span>
+            <span>Максимум - 11 символов</span>
           </div>
           <Button isLoader={button} type="submit" text="Развернуть" />
         </form>

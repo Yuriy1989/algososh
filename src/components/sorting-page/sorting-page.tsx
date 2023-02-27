@@ -8,15 +8,15 @@ import sorting from './sorting.module.css';
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Direction } from "../../types/direction";
 import { RandomArr } from '../../utils/random';
-import { checkedRadio } from '../../types/types';
+import { checkedRadio, IButton, IStepsSorting } from '../../types/types';
 import { Column } from '../ui/column/column';
 
 export const SortingPage: React.FC = () => {
 
   const {values, setValues} = useForm({check: checkedRadio.Choice});
-  const [list, setList] = useState<Array<number> | null>(null);
+  const [list, setList] = useState<Array<IStepsSorting> | null>(null);
   const [steps, setSteps] = useState<number>(0);
-  const [button, setButton] = useState<boolean>(false);
+  const [button, setButton] = useState<IButton>({active: false, textbutton: ''});
   const [numb, setNumb] = useState<Array<number>>([]);
 
   const onButtonActive = (e: {
@@ -32,32 +32,30 @@ export const SortingPage: React.FC = () => {
     e.preventDefault();
       setList(null);
       setSteps(0);
-      setList(RandomArr());
+      setNumb(RandomArr());
   }
 
   const handleClickSorting = (e: any) => {
-    if(list && values.check) {
-      console.log(sortingArray(list, values.check, e.target.innerText));
+    if(numb && values.check) {
+      setButton({active: true, textbutton: e.target.innerText});
+      setList(sortingArray(numb, values.check, e.target.innerText));
     }
   }
 
   useEffect(() => {
     let index = list?.length ? list.length : 0;
-    if (steps > index) {
-      setButton(false);
+    if (steps >= index-1) {
+      setButton({active: false, textbutton: ''});
       return;
     }
 
     setTimeout(() => {
       setSteps(steps+1);
-      if(list){
-        setNumb(list.slice(0, steps));
-      }
     }, 1000);
   }, [steps, list])
 
   useEffect(() => {
-    setList(RandomArr());
+    setNumb(RandomArr());
   }, [])
 
   return (
@@ -70,16 +68,52 @@ export const SortingPage: React.FC = () => {
               <RadioInput onChange={onButtonActive} checked={values.check == checkedRadio.Bubble ? true : false} label="Пузырёк" value="bubble" name="sort" extraClass={`${sorting.radioInput_margin}`}/>
             </div>
             <div className={sorting.button}>
-              <Button onClick={handleClickSorting} name="max" isLoader={button} type="button" text="По возрастанию" sorting={Direction.Ascending} extraClass={`${sorting.mr12}`}/>
-              <Button onClick={handleClickSorting} name="min" isLoader={button} type="button" text="По убыванию" sorting={Direction.Descending} extraClass={`${sorting.mr80}`}/>
+              <Button
+                onClick={handleClickSorting}
+                disabled={button.textbutton != "По возрастанию" && button.textbutton ? true : false}
+                isLoader={button.textbutton === "По возрастанию" ? true : false}
+                type="button"
+                text="По возрастанию"
+                sorting={Direction.Ascending}
+                extraClass={`${sorting.mr12}`}
+              />
+              <Button
+                onClick={handleClickSorting}
+                disabled={button.textbutton != "По убыванию" && button.textbutton ? true : false}
+                isLoader={button.textbutton === "По убыванию" ? true : false}
+                type="button"
+                text="По убыванию"
+                sorting={Direction.Descending}
+                extraClass={`${sorting.mr80}`}
+              />
             </div>
-            <Button isLoader={button} type="submit" text="Новый массив" />
+            <Button
+              disabled={button.textbutton != "Новый массивю" && button.textbutton ? true : false}
+              isLoader={button.textbutton === "Новый массив" ? true : false}
+              type="submit"
+              text="Новый массив"
+            />
           </div>
         </form>
         {list &&
           <div className={sorting.columns}>
             {
-              list.map((item, index) => {
+              list[steps].mas.map((item, index) => {
+                if (list[steps]?.changing?.includes(index)) {
+                  return <Column key={index} state={ElementStates.Changing} index={item} />
+                } else if (list[steps]?.modified?.includes(index)) {
+                  return <Column key={index} state={ElementStates.Modified} index={item} />
+                } else {
+                  return <Column key={index} state={ElementStates.Default}  index={item} />
+                }
+              })
+            }
+          </div>
+        }
+        {!list &&
+          <div className={sorting.columns}>
+            {
+              numb.map((item, index) => {
                 return <Column key={index} index={item} />
               })
             }

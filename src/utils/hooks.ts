@@ -13,7 +13,6 @@ export function useForm(inputValues: IInputValues) {
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { value, name } = event.target;
-        console.log("event.target",  event.target);
         setValues({ ...values, [name]: value });
     };
     return { values, handleChange, setValues };
