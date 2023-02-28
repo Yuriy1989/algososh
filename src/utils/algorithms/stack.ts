@@ -1,6 +1,6 @@
 import { IStack, IStackSteps } from "../../types/types";
 
-  export class Stack<T> implements IStack<T> {
+  class Stack<T> implements IStack<T> {
     private container: T[] = [];
     public steps: Array<IStackSteps<T>> = [];
 
@@ -8,11 +8,6 @@ import { IStack, IStackSteps } from "../../types/types";
       this.container.push(item)
       this._steps();
       return this.steps;
-    };
-
-    show = (): void => {
-      console.log("container", this.container);
-      console.log("steps", this.steps);
     };
 
     pop = (): Array<IStackSteps<T>> => {
@@ -32,19 +27,17 @@ import { IStack, IStackSteps } from "../../types/types";
 
     getSize = () => this.container.length;
 
+    clearContainet = () : void => {
+      this.container = [];
+    }
+
     _steps = () => {
       let chan: Array<number> = [];
       chan.push(this.getSize()-1)
-      this.steps.push({
+      this.steps=[({
         mas: this.container,
-        changing: [...chan],
-      })
-      let mod: Array<number> = [];
-      mod.push(this.getSize()-1)
-      this.steps.push({
-        mas: this.container,
-        modified: [...mod],
-      })
+        changing: chan,
+      })]
     }
   }
 

@@ -1,125 +1,125 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { ElementStates } from "../../types/element-states";
+import { useForm } from "../../utils/hooks";
+import { Button } from "../ui/button/button";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
+import queue from './queue.module.css';
+import { IStackSteps } from "../../types/types";
+import { Input } from "../ui/input/input";
+import { newQueue } from '../../utils/algorithms/queue';
+import { Circle } from "../ui/circle/circle";
 
 export const QueuePage: React.FC = () => {
 
-  // interface IQueue<T> {
-  //   enqueue: (item: T) => void;
-  //   dequeue: () => void;
-  //   peak: () => T | null;
-  // }
-  
-  // class Queue<T> implements IQueue<T> {
-  //   private container: (T | null)[] = [];
-  //   private head = 0;
-  //   private tail = 0;
-  //   private readonly size: number = 0;
-  //   private length: number = 0;
-  
-  //   constructor(size: number) {
-  //     this.size = size;
-  //     this.container = Array(size);
-  //   }
-  
-  //   enqueue = (item: T) => {
-  //     if (this.length >= this.size) {
-  //       throw new Error("Maximum length exceeded");
-  //     }
+  const {values, setValues} = useForm({text: ''});
+  const [list, setList] = useState<Array<IStackSteps<String>> | null>(null);
+  const [steps, setSteps] = useState<number>(0);
 
-  //     this.container[this.tail % this.size] = item;
-  //     this.tail++;
-  //     this.length++;
-  //   };
-  
-  //   dequeue = () => {
-  //     if (this.isEmpty()) {
-  //       throw new Error("No elements in the queue");
-  //     }
-  
-  //     this.container[this.head % this.size] = null;
-  //     this.head++;
-  //     this.length--;
-  //   };
-  
-  //   peak = (): T | null => {
-  //     if (this.isEmpty()) {
-  //       throw new Error("No elements in the queue");
-  //     }
-  //     return this.container[this.head % this.size];
-  //   };
-  
-  //   isEmpty = () => this.length === 0;
-  // }
-  
-  // const queue = new Queue<number>(4);
-  // queue.enqueue(12);
-  // queue.enqueue(3);
-  // queue.enqueue(33);
-  // console.log(`peak ${queue.peak()}`); // 12
-  // queue.dequeue();
-  // queue.dequeue();
-  // queue.enqueue(1);
-  // queue.enqueue(2);
-  // console.log(`peak ${queue.peak()}`); // 33
-
-
-  interface IStack<T> {
-    push: (item: T) => void;
-    pop: () => void;
-    peak: () => T | null;
+  const onButtonActive = (e: {
+    target: any; preventDefault: () => void;
+  }) => {
+    const { value } = e.target;
+    setValues({ text: value });
   }
-  
-  class Node<T> {
-    value: T;
-    next: Node<T> | null;
-    constructor(value: T, next?: Node<T> | null) {
-      this.value = value;
-      this.next = next === undefined ? null : next;
+
+  const handleClickReset = () => {
+    setList(null);
+    setSteps(0);
+    // newStack.clearContainet();
+  }
+
+  const handleClickPush = () => {
+    setList(null);
+    setSteps(0);
+    if(values.text) {
+      // setList(newQueue.enqueue(values.text));
     }
+    setValues({ text: '' });
   }
-  
-  class Stack<T> implements IStack<T> {
-    private top: Node<T> | null = null;
-  
-    constructor(node: Node<T>) {
-      this.top = node;
-    }
-    push = (item: T): void => {
-      
-      // this.top = item;
-    };
-  
-    pop = (): void => {
-      if (this.isEmpty()) {
-        throw new Error("stack is empty");
-      }
-      // Ваш код
-    };
-  
-    peak = (): T | null => {
-      if (this.isEmpty()) {
-        throw new Error("stack is empty");
-      }
-      return this.top?.value || null;
-    };
-  
-    isEmpty = (): boolean => {
-      return this.top === null;
-    };
+
+  const handleClickPop = () => {
+    // setList(null);
+    // setSteps(0);
+    // const size = newStack.getSize();
+    // if(size) {
+    //   setList(newStack.pop());
+    // }
   }
-  
-  const st = new Stack<string>(new Node("Йоу!"));
-  st.push("как");
-  st.push("сам?");
-  st.pop();
-  console.log(st.peak()); // как
-  st.push("дела?");
-  console.log(st.peak()); // дела?
-  
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setSteps(steps+1);
+  //   }, 500);
+  // }, [list])
 
   return (
     <SolutionLayout title="Очередь">
-
+      <div className={queue.queue}>
+        <form className={queue.form}>
+          <div className={queue.input}>
+            <Input
+              name={'text'}
+              onChange={onButtonActive}
+              value={`${values.text}`}
+              placeholder={'Введите текст'}
+              maxLength={4}
+            />
+            <span>Максимум - 4 символа</span>
+          </div>
+          <div className={queue.button}>
+            <Button
+              disabled={!values.text ? true : false}
+              onClick={handleClickPush}
+              type="button"
+              text="Добавить"
+              extraClass={`${queue.mr12}`}
+            />
+            <Button
+              onClick={handleClickPop}
+              // disabled={!list ? true : false}
+              type="button"
+              text="Удалить"
+              extraClass={`${queue.mr80}`}
+            />
+          </div>
+          <Button
+            onClick={handleClickReset}
+            // disabled={!list ? true : false}
+            type="reset"
+            text="Очистить"
+          />
+        </form>
+        {/* {list &&
+          <div className={queue.circle}>
+            {
+              list[0].mas.map((item, index) => {
+                if (list[0].changing?.includes(index) && steps) {
+                  return <Circle
+                    state={ElementStates.Default}
+                    letter={`${item}`}
+                    index={index}
+                    head="top"
+                    key={index} />
+                } else if (list[0].changing?.includes(index)) {
+                  return <Circle
+                    state={ElementStates.Changing}
+                    letter={`${item}`}
+                    index={index}
+                    head="top"
+                    key={index} />
+                } else {
+                  return <Circle
+                    state={ElementStates.Default}
+                    letter={`${item}`}
+                    index={index}
+                    key={index}
+                  />
+                }
+              })
+            }
+          </div>
+        } */}
+      </div>
     </SolutionLayout>
   );
 };

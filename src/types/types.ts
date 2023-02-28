@@ -34,3 +34,10 @@ export interface IStackSteps<T> {
   changing?: Array<number>,
   modified?: Array<number>,
 }
+
+
+export interface IQueue<T> {
+  enqueue: (item: T) => void;
+  dequeue: () => void;
+  peak: () => T | null;
+}
