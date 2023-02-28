@@ -41,3 +41,8 @@ export interface IQueue<T> {
   dequeue: () => void;
   peak: () => T | null;
 }
+
+export interface IQueueSteps<T> {
+  mas: Array<T>,
+  changing?: Array<number>,
+}

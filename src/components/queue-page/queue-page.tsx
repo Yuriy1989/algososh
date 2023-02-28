@@ -4,16 +4,17 @@ import { useForm } from "../../utils/hooks";
 import { Button } from "../ui/button/button";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import queue from './queue.module.css';
-import { IStackSteps } from "../../types/types";
+import { IQueueSteps } from "../../types/types";
 import { Input } from "../ui/input/input";
 import { newQueue } from '../../utils/algorithms/queue';
 import { Circle } from "../ui/circle/circle";
 
 export const QueuePage: React.FC = () => {
 
-  const {values, setValues} = useForm({text: ''});
-  const [list, setList] = useState<Array<IStackSteps<String>> | null>(null);
+  const { values, setValues } = useForm({ text: '' });
+  const [list, setList] = useState<Array<IQueueSteps<String>> | null>(null);
   const [steps, setSteps] = useState<number>(0);
+  const [size, setSize] = useState<number>(0);
 
   const onButtonActive = (e: {
     target: any; preventDefault: () => void;
@@ -31,26 +32,40 @@ export const QueuePage: React.FC = () => {
   const handleClickPush = () => {
     setList(null);
     setSteps(0);
-    if(values.text) {
-      // setList(newQueue.enqueue(values.text));
+    if (values.text) {
+      newQueue.enqueue(values.text);
+      console.log("container= ", newQueue.getSize());
     }
     setValues({ text: '' });
   }
 
   const handleClickPop = () => {
-    // setList(null);
-    // setSteps(0);
-    // const size = newStack.getSize();
-    // if(size) {
-    //   setList(newStack.pop());
-    // }
+    setList(null);
+    setSteps(0);
+    const size = newQueue.getSize();
+    if(size) {
+      newQueue.dequeue();
+    }
   }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setSteps(steps+1);
-  //   }, 500);
-  // }, [list])
+  useEffect(() => {
+    // setTimeout(() => {
+    //   setSteps(steps+1);
+    // }, 500);
+  }, [list])
+
+  useEffect(() => {
+    setSize(newQueue.getSize());
+
+  }, [])
+
+  const test = () => {
+    let content = [];
+    for (let i = 0; i < size; i++) {
+      content.push(<Circle state={ElementStates.Default} extraClass={queue.mr12} index={i} key={i} />)
+    }
+    return content;
+  }
 
   return (
     <SolutionLayout title="Очередь">
@@ -89,36 +104,11 @@ export const QueuePage: React.FC = () => {
             text="Очистить"
           />
         </form>
-        {/* {list &&
+        {size &&
           <div className={queue.circle}>
-            {
-              list[0].mas.map((item, index) => {
-                if (list[0].changing?.includes(index) && steps) {
-                  return <Circle
-                    state={ElementStates.Default}
-                    letter={`${item}`}
-                    index={index}
-                    head="top"
-                    key={index} />
-                } else if (list[0].changing?.includes(index)) {
-                  return <Circle
-                    state={ElementStates.Changing}
-                    letter={`${item}`}
-                    index={index}
-                    head="top"
-                    key={index} />
-                } else {
-                  return <Circle
-                    state={ElementStates.Default}
-                    letter={`${item}`}
-                    index={index}
-                    key={index}
-                  />
-                }
-              })
-            }
+            {test()}
           </div>
-        } */}
+        }
       </div>
     </SolutionLayout>
   );
