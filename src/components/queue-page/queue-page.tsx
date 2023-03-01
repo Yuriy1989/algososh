@@ -16,7 +16,7 @@ export const QueuePage: React.FC = () => {
   const [steps, setSteps] = useState<number>(0);
   const [size, setSize] = useState<number>(0);
   const [arr, setArr] = useState<Array<string>>([]);
-  const [stepsArr, setStepsArr] = useState<Array<ISteps>>([]);
+  const [stepsArr, setStepsArr] = useState<Array<ISteps>>();
 
   const onButtonActive = (e: {
     target: any; preventDefault: () => void;
@@ -32,7 +32,7 @@ export const QueuePage: React.FC = () => {
   }
 
   interface ISteps {
-    mas?: Array<string>,
+    mas?: string,
     head?: boolean,
   }
 
@@ -41,28 +41,62 @@ export const QueuePage: React.FC = () => {
     setSteps(0);
     if (values.text) {
       newQueue.enqueue(values.text);
-      console.log("container= ", newQueue.getSize());
-      console.log("head= ", newQueue.peak());
-      let mass: Array<string> =[];
-      mass.push(values.text);
-      console.log("mass = ", mass);
-      stepsArr[{
-        mas: mass,
-        head: false
-      }]
-      setTimeout(() => {
-        stepsArr[0][{
-          head: true
-        }]
-        setSteps(steps+1);
-      }, 1000);
-      setStepsArr(stepsArr);
-      setArr(mass);
+      // console.log("container= ", newQueue.getSize());
+      // console.log("head= ", newQueue.peak());
+
+      if (stepsArr && arr.length) {
+
+        let addArr: Array<string> = arr;
+        addArr.push(values.text);
+        setArr(addArr);
+
+        let element: Array<ISteps> = [];
+        element.push({
+          mas: values.text,
+          head: true,
+        });
+        element.push({
+          mas: values.text,
+          head: false,
+        });
+        setStepsArr(element)
+
+      } else {
+        let element: Array<ISteps> = [];
+        let addArr: Array<string> = [];
+        addArr.push(values.text);
+        setArr(addArr);
+
+        element.push({
+          mas: values.text,
+          head: true,
+        });
+        element.push({
+          mas: values.text,
+          head: false,
+        });
+        setStepsArr(element)
+      }
+
+      // console.log("stepsArr1 = ", stepsArr);
+      // console.log("arr", arr);
+
+      // setTimeout(() => {
+      //   if (stepsArr?.mas) {
+      //     let mass: Array<string> = stepsArr.mas;
+      //     setStepsArr({
+      //       mas: mass,
+      //       head: false,
+      //     })
+      //   }
+      //   console.log("stepsArr2 = ", stepsArr);
+      // }, 1500);
     }
     setValues({ text: '' });
   }
 
-  console.log("stepsArr = ", stepsArr);
+  console.log("stepsArr = ", stepsArr, "arr = ", arr);
+
 
   const handleClickPop = () => {
     setList(null);
@@ -77,6 +111,7 @@ export const QueuePage: React.FC = () => {
 
   useEffect(() => {
     let index = stepsArr?.length ? stepsArr.length : 0;
+    console.log('index = ', index);
     if (steps >= index-1) {
       // setButton(false);
       return;
@@ -84,9 +119,9 @@ export const QueuePage: React.FC = () => {
 
     setTimeout(() => {
       setSteps(steps+1);
+      console.log('steps Effect = ', steps);
     }, 500);
-    console.log('steps = ', steps);
-  }, [arr])
+  }, [arr, stepsArr])
 
   useEffect(() => {
     setSize(newQueue.getSize());
@@ -97,18 +132,40 @@ export const QueuePage: React.FC = () => {
     let i = 0;
     let j = 0;
     while (i <= size) {
-      if (arr.length > j) {
-        content.push(<Circle
-          state={ElementStates.Default}
-          head={`head`}
-          tail={`tail`}
-          letter={`${arr[j]}`}
-          extraClass={queue.mr12}
-          index={i}
-          key={i}
-        />)
-        j++;
-        i++;
+      if (arr && stepsArr) {
+        if (arr.length > j && stepsArr[steps].head === true && stepsArr[steps].mas === arr[j]) {
+          content.push(<Circle
+            state={ElementStates.Modified}
+            head={`head`}
+            tail={`tail`}
+            letter={`${arr[j]}`}
+            extraClass={queue.mr12}
+            index={i}
+            key={i}
+          />)
+          j++;
+          i++;
+        } else if (arr.length > j) {
+          content.push(<Circle
+            state={ElementStates.Default}
+            head={`head`}
+            tail={`tail`}
+            letter={`${arr[j]}`}
+            extraClass={queue.mr12}
+            index={i}
+            key={i}
+          />)
+          j++;
+          i++;
+        } else {
+          content.push(<Circle
+            state={ElementStates.Default}
+            extraClass={queue.mr12}
+            index={i}
+            key={i}
+          />)
+          i++;
+        }
       } else {
         content.push(<Circle
           state={ElementStates.Default}
