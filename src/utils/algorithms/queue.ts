@@ -1,4 +1,4 @@
-import { IQueue, IStackSteps } from "../../types/types";
+import { IQueue } from "../../types/types";
 
   class Queue<T> implements IQueue<T> {
     private container: (T | null)[] = [];
@@ -6,7 +6,6 @@ import { IQueue, IStackSteps } from "../../types/types";
     private tail = 0;
     private readonly size: number = 0;
     private length: number = 0;
-    public steps: Array<IStackSteps<T>> = [];
 
     constructor(size: number) {
       this.size = size;
@@ -47,14 +46,6 @@ import { IQueue, IStackSteps } from "../../types/types";
 
     isEmpty = () => this.length === 0;
 
-    _steps = () => {
-      let chan: Array<number> = [];
-      chan.push(this.getSize()-1)
-      this.steps=[({
-        mas: this.container,
-        changing: chan,
-      })]
-    }
   }
 
   export const newQueue = new Queue<string>(7);
