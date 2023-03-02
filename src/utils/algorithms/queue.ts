@@ -13,7 +13,7 @@ import { IQueue } from "../../types/types";
     }
 
     getSize = () => {
-      console.log(this.container );
+      // console.log(this.container );
       return this.size;
     }
 
