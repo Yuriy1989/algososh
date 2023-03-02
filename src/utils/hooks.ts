@@ -3,6 +3,7 @@ import { checkedRadio } from '../types/types';
 
 export interface IInputValues {
   text?: string;
+  index?: number | null;
   numbers?: number | null;
   buttonActive?: boolean;
   check? : checkedRadio;

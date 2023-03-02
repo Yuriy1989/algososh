@@ -1,126 +1,109 @@
 import React from "react";
+import { useForm } from "../../utils/hooks";
+import { Button } from "../ui/button/button";
+import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
+import list from "./list.module.css";
 
 export const ListPage: React.FC = () => {
 
-  // class Node<T> {
-  //   value: T
-  //   next: Node<T> | null
-  //   constructor(value: T, next?: Node<T> | null) {
-  //     this.value = value;
-  //     this.next = (next === undefined ? null : next);
-  //   }
-  // }
-  
-  // interface ILinkedList<T> {
-  //   append: (element: T) => void;
-  //   insertAt: (element: T, position: number) => void;
-  //   getSize: () => number;
-  //   print: () => void;
-  // }
-  
-  // class LinkedList<T> implements ILinkedList<T> {
-  //   private head: Node<T> | null;
-  //   private size: number;
-  //   constructor() {
-  //     this.head = null;
-  //     this.size = 0;
-  //   }
-  
-  //   insertAt(element: T, index: number) {
-  //     if (index < 0 || index > this.size) {
-  //       console.log('Enter a valid index');
-  //       return;
-  //     } else {
-  //       const node = new Node(element);
-  //       if (index === 0) {
-  //         node.next = this.head;
-  //         this.head = node;
-  //       } else {
-  //         let curr = this.head;
-  //         let currIndex = 0;
-  //         while (currIndex < index) {
-  //           currIndex++;
-  //             if(curr?.next && currIndex !== index) {
-  //               curr = curr.next;
-  //           }
-  //         }
-  //         if(curr) {
-  //           node.next = curr.next;
-  //           curr.next = node;
-  //         }
-  //       }
-  //       this.size++;
-  //     }
-  //   }
-  
-  //   append(element: T) {
-  //     const node = new Node(element);
-  //     let current;
-  
-  //     if (this.head === null) {
-  //       this.head = node;
-  //     } else {
-  //       current = this.head;
-  //       while (current.next) {
-  //         current = current.next;
-  //       }
-  
-  //       current.next = node;
-  //     }
-  //     this.size++;
-  //   }
-  
-  //   getSize() {
-  //     return this.size;
-  //   }
-  
-  //   print() {
-  //     let curr = this.head;
-  //     let res = '';
-  //     while (curr) {
-  //       res += `${curr.value} `;
-  //       curr = curr.next;
-  //     }
-  //     console.log(res);
-  //   }
-  // }
-  
-  // const list = new LinkedList<number>();
-  // list.insertAt(12, 0);
-  // list.print();
-  // list.insertAt(13, 0);
-  // list.print();
-  // list.insertAt(114, 1);
-  // list.print();
-  // list.insertAt(114342, 1);
-  // list.print(); // 13 114 12   
-  
-  class Node<T> {
-    value: T
-    next: Node<T> | null
-    constructor(value: T, next?: Node<T> | null) {
-      this.value = value;
-      this.next = (next === undefined ? null : next);
-    }
+  const { values, setValues } = useForm({ text: '' , index: null});
+
+  const onButtonActive = (e: {
+    target: any; preventDefault: () => void;
+  }) => {
+    const { name, value} = e.target;
+    setValues( { ...values, [name]: value} );
   }
-  
-  const removeElements = (head: Node<number> | null, val: number): Node<number> | null => {
-    let dummyHead = new Node(0); // добавим в начало пустой узел
-    dummyHead.next = head;
-    let curr = dummyHead;
-      
 
-    // Ваш код...
-  
-    return dummyHead.next; // возвращаем список без пустого узла
-  };
-
-  // removeElements(23,23);
+  const handleClickReset = () => {
+    // setList(null);
+    // setSteps(0);
+    // newStack.clearContainet();
+  }
 
   return (
     <SolutionLayout title="Связный список">
-
+      <div className={list.queue}>
+        <form className={list.form}>
+          <div className={list.formValues}>
+            <div className={list.inputValues}>
+              <Input
+                name="text"
+                onChange={onButtonActive}
+                value={`${values.text}`}
+                placeholder="Введите значение"
+                maxLength={4}
+              />
+              <span>Максимум - 4 символа</span>
+            </div>
+            <div className={list.button}>
+              <Button
+                // disabled={!values.text ? true : false}
+                // onClick={handleClickPush}
+                type="button"
+                text="Добавить в head"
+                extraClass={`${list.mr12}`}
+              />
+              <Button
+                // onClick={handleClickPop}
+                // disabled={!list ? true : false}
+                type="button"
+                text="Добавить в tail"
+                extraClass={`${list.mr12}`}
+              />
+              <Button
+                // onClick={handleClickPop}
+                // disabled={!list ? true : false}
+                type="button"
+                text="Удалить из head"
+                extraClass={`${list.mr12}`}
+              />
+              <Button
+                // onClick={handleClickPop}
+                // disabled={!list ? true : false}
+                type="button"
+                text="Удалить из tail"
+                extraClass={`${list.mr12}`}
+              />
+            </div>
+          </div>
+          <div className={list.formIndex}>
+            <div className={list.inputIndex}>
+              <Input
+                name="index"
+                onChange={onButtonActive}
+                value={values.index ? values.index : ''}
+                placeholder="Введите индекс"
+              />
+            </div>
+            <Button
+              // disabled={!values.text ? true : false}
+              // onClick={handleClickPush}
+              type="button"
+              text="Добавить по индексу"
+              extraClass={`${list.mr12}`}
+            />
+            <Button
+              // onClick={handleClickPop}
+              // disabled={!list ? true : false}
+              type="button"
+              text="Удалить по индексу"
+              extraClass={`${list.mr12}`}
+            />
+          </div>
+        </form>
+        {/* {size && */}
+        <>
+          {/* <div className={queue.circle}>
+              {test()}
+            </div> */}
+          {/* <div className={queue.circle}> */}
+          {/* {test2()} */}
+          {/* </div> */}
+        </>
+        {/* } */}
+      </div>
     </SolutionLayout>
   );
 };

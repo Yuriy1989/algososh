@@ -46,7 +46,9 @@ export const QueuePage: React.FC = () => {
     str?: string,
     head?: boolean,
     tail?: boolean,
-    active?: boolean
+    active?: boolean,
+    pop?: boolean
+    push?: boolean
   }
 
   let testArr: Array<IList> = [];
@@ -62,6 +64,7 @@ export const QueuePage: React.FC = () => {
         let i = 0;
         while(elements.length > i) {
           elements[i].tail = false
+          elements[i].pop = false
           i++;
         }
 
@@ -69,7 +72,9 @@ export const QueuePage: React.FC = () => {
           str: values.text,
           head: false,
           tail: true,
-          active: true
+          active: true,
+          pop: false,
+          push: true
         });
 
         setElements(testArr);
@@ -78,73 +83,18 @@ export const QueuePage: React.FC = () => {
           str: values.text,
           head: true,
           tail: true,
-          active: true
+          active: true,
+          pop: false,
+          push: true
         });
 
         setElements(testArr);
       }
 
       newQueue.enqueue(values.text);
-      // console.log("container= ", newQueue.getSize());
-      // console.log("head= ", newQueue.peak());
-
-      // if (stepsArr && arr.length <=7) {
-
-      //   let addArr: Array<string> = arr;
-      //   addArr.push(values.text);
-      //   setArr(addArr);
-
-      //   let element: Array<ISteps> = [];
-      //   let indexTail = arr.length - 1;
-
-      //   element.push({
-      //     valuesHead: addArr[0],
-      //     head: true,
-      //     valuesTail: values.text,
-      //     indexTail: indexTail,
-      //     tail: true,
-      //     animation: true,
-      //   });
-      //   element.push({
-      //     valuesHead: addArr[0],
-      //     head: true,
-      //     valuesTail: values.text,
-      //     indexTail: indexTail,
-      //     tail: true,
-      //     animation: false,
-      //   });
-      //   setStepsArr(element)
-
-      // } else {
-      //   let element: Array<ISteps> = [];
-      //   let addArr: Array<string> = [];
-      //   addArr.push(values.text);
-      //   setArr(addArr);
-
-      //   element.push({
-      //     valuesHead: values.text,
-      //     head: true,
-      //     valuesTail: values.text,
-      //     indexTail: 0,
-      //     tail: true,
-      //     animation: true,
-      //   });
-      //   element.push({
-      //     valuesHead: values.text,
-      //     head: true,
-      //     valuesTail: values.text,
-      //     indexTail: 0,
-      //     tail: true,
-      //     animation: false,
-      //   });
-      //   setStepsArr(element)
-      // }
     }
     setValues({ text: '' });
   }
-
-  // console.log("stepsArr = ", stepsArr, "arr = ", arr);
-  // console.log("elements= ", elements);
 
   const handleClickPop = () => {
     setList(null);
@@ -152,7 +102,6 @@ export const QueuePage: React.FC = () => {
     const size = newQueue.getSize();
     if(size) {
       newQueue.dequeue();
-
 
       if(elements.length > 0) {
         testArr = elements
@@ -163,60 +112,32 @@ export const QueuePage: React.FC = () => {
             testArr[i].str = '';
             testArr[i].active = false;
             testArr[i].head = false;
+            testArr[i].pop = true;
 
             testArr[i+1].head = true;
             return
+          } else {
+            testArr[i].pop = false;
           }
           i++;
         }
       }
 
       setElements(testArr);
-      // mas.shift();
-      // if (stepsArr && arr.length <= 7 ) {
-
-      //   let addArr: Array<string> = arr;
-      //   console.log(addArr.shift());
-      //   setArr(addArr);
-
-      //   let element: Array<ISteps> = [];
-      //   let indexTail = arr.length - 1;
-
-      //   element.push({
-      //     valuesHead: addArr[0],
-      //     head: true,
-      //     valuesTail: values.text,
-      //     indexTail: indexTail,
-      //     tail: true,
-      //     animation: true,
-      //   });
-      //   element.push({
-      //     valuesHead: addArr[0],
-      //     head: true,
-      //     valuesTail: values.text,
-      //     indexTail: indexTail,
-      //     tail: true,
-      //     animation: false,
-      //   });
-      //   setStepsArr(element)
-      // }
     }
   }
 
   useEffect(() => {
-    // let index = stepsArr?.length ? stepsArr.length : 0;
     let index = elements?.length ? elements.length : 0;
-    // console.log('index = ', index);
-    if (steps > 1) {
+    if (steps >= 1) {
       // setButton(false);
-      // console.log('steps Effect END= ', steps);
       return;
     }
 
     setTimeout(() => {
       setSteps(steps+1);
       // console.log('steps Effect = ', steps);
-    }, 500);
+    }, 2500);
   }, [arr, stepsArr, elements, steps])
 
   useEffect(() => {
@@ -231,21 +152,37 @@ export const QueuePage: React.FC = () => {
     let j = 0;
     while (j <= size) {
       if (elements.length > i) {
-        console.log('elements.length', elements.length);
-        // console.log('elements', elements);
-        if (steps === 0 && elements.length-1 === i) {
+        if (steps === 0 && elements[i].push && elements.length-1 === i) {
+          console.log("1");
           content.push(<Circle
             state={ElementStates.Changing}
-            tail={'tail'}
+            // head={(elements[i].head) ? 'head' : ''}
+            // tail={elements[i].tail ? 'tail' : ''}
             extraClass={queue.mr12}
             index={i}
             key={i}
           />)
           j++;
           i++;
-        } else if (steps === 1 && elements[i].tail && elements[i].active) {
+        } else
+        if (steps === 1 && elements[i].push && elements.length-2 === i) {
+          console.log("2", elements.length-2);
           content.push(<Circle
-            state={ElementStates.Changing}
+            state={ElementStates.Default}
+            head={(elements[i].head) ? 'head' : ''}
+            tail={'tail'}
+            letter={elements[i].active ? `${elements[i].str}` : ''}
+            extraClass={queue.mr12}
+            index={i}
+            key={i}
+          />)
+          j++;
+          i++;
+          console.log("2", elements.length-2);
+        } else if (steps === 1 && elements[i].tail) {
+          console.log("3");
+          content.push(<Circle
+            state={ElementStates.Default}
             head={(elements[i].head) ? 'head' : ''}
             tail={elements[i].tail ? 'tail' : ''}
             letter={elements[i].active ? `${elements[i].str}` : ''}
@@ -256,6 +193,7 @@ export const QueuePage: React.FC = () => {
           j++;
           i++;
         } else {
+          console.log("4");
           content.push(<Circle
             state={ElementStates.Default}
             head={(elements[i].head) ? 'head' : ''}
@@ -268,9 +206,8 @@ export const QueuePage: React.FC = () => {
           j++;
           i++;
         }
-        // j++;
-        // i++;
       } else {
+        console.log("5");
         content.push(<Circle
           state={ElementStates.Default}
           extraClass={queue.mr12}
@@ -281,6 +218,7 @@ export const QueuePage: React.FC = () => {
         i++;
       }
     }
+    console.log("content", content);
     return content;
   }
 
