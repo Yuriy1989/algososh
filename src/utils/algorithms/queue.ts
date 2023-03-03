@@ -1,6 +1,6 @@
 import { IQueue } from "../../types/types";
 
-  class Queue<T> implements IQueue<T> {
+  export class Queue<T> implements IQueue<T> {
     private container: (T | null)[] = [];
     private head = 0;
     private tail = 0;
@@ -13,9 +13,22 @@ import { IQueue } from "../../types/types";
     }
 
     getSize = () => {
-      // console.log(this.container );
       return this.size;
     }
+
+    getContainer = () => {
+      if(this.container) {
+        return this.container;
+      }
+    }
+
+    getHeadTail = () => {
+      const headTail = {
+        head: this.head,
+        tail: this.tail,
+      }
+      return headTail;
+    };
 
     enqueue = (item: T) => {
       if (this.length >= this.size) {
@@ -46,6 +59,13 @@ import { IQueue } from "../../types/types";
 
     isEmpty = () => this.length === 0;
 
+    clearContainet = () : void => {
+      this.container = [];
+      this.head = 0;
+      this.tail = 0;
+      this.isEmpty();
+      newQueue = new Queue<string>(7);
+    }
   }
 
-  export const newQueue = new Queue<string>(7);
+  export let newQueue = new Queue<string>(7);

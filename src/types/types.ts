@@ -1,3 +1,5 @@
+import { ElementStates } from "./element-states";
+
 export interface ISteps {
   mas: Array<string>,
   changing?: Array<number>,
@@ -35,14 +37,16 @@ export interface IStackSteps<T> {
   modified?: Array<number>,
 }
 
-
 export interface IQueue<T> {
   enqueue: (item: T) => void;
   dequeue: () => void;
   peak: () => T | null;
 }
 
-export interface IQueueSteps<T> {
-  mas: Array<T>,
-  changing?: Array<number>,
+export interface IQueueElements {
+  value?: string | null,
+  index?: number,
+  head?: number,
+  tail?: number,
+  state?: ElementStates,
 }
