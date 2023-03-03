@@ -9,11 +9,7 @@ import { IQueue } from "../../types/types";
 
     constructor(size: number) {
       this.size = size;
-      this.container = Array(size);
-    }
-
-    getSize = () => {
-      return this.size;
+      this.container = Array(size).fill(null);
     }
 
     getContainer = () => {
@@ -63,7 +59,7 @@ import { IQueue } from "../../types/types";
       this.container = [];
       this.head = 0;
       this.tail = 0;
-      this.isEmpty();
+      this.length = 0;
       newQueue = new Queue<string>(7);
     }
   }

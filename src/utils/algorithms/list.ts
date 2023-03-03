@@ -1,3 +1,14 @@
+import { ElementStates } from "../../types/element-states";
+import { ILinkedList } from "../../types/types";
+
+export interface IList{
+  value?: string | number | null,
+  index?: number | null,
+  head?: Node<T>,
+  tail?: number | null,
+  state?: ElementStates,
+}
+
   class Node<T> {
     value: T
     next: Node<T> | null
@@ -7,18 +18,13 @@
     }
   }
 
-  interface ILinkedList<T> {
-    append: (element: T) => void;
-    insertAt: (element: T, position: number) => void;
-    getSize: () => number;
-    print: () => void;
-  }
-
   class LinkedList<T> implements ILinkedList<T> {
     private head: Node<T> | null;
+    private tail: Node<T> | null;
     private size: number;
     constructor() {
       this.head = null;
+      this.tail = null;
       this.size = 0;
     }
 
@@ -72,21 +78,17 @@
 
     print() {
       let curr = this.head;
-      let res = '';
+      let res = [];
       while (curr) {
-        res += `${curr.value} `;
+        res.push(curr.value);
         curr = curr.next;
       }
-      console.log(res);
+      return(res);
+    }
+
+    getHeadTail() {
+      return this.head
     }
   }
 
-  export const list = new LinkedList<number>();
-  // list.insertAt(12, 0);
-  // list.print();
-  // list.insertAt(13, 0);
-  // list.print();
-  // list.insertAt(114, 1);
-  // list.print();
-  // list.insertAt(114342, 1);
-  // list.print(); // 13 114 12
+  export const listAlg = new LinkedList<string | number>();

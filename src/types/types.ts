@@ -19,6 +19,11 @@ export enum checkedRadio {
   Bubble = "bubble",
 }
 
+export enum actions {
+  Push = "push",
+  Pop = "pop",
+}
+
 export interface IButton {
   active: boolean,
   textbutton : string,
@@ -45,8 +50,28 @@ export interface IQueue<T> {
 
 export interface IQueueElements {
   value?: string | null,
-  index?: number,
-  head?: number,
-  tail?: number,
+  index?: number | null,
+  head?: number | null,
+  tail?: number | null,
   state?: ElementStates,
 }
+
+export interface ILinkedList<T> {
+  append: (element: T) => void;
+  insertAt: (element: T, position: number) => void;
+  getSize: () => number;
+  print: () => void;
+}
+
+interface IHead {
+  value: 0,
+  next: Node
+}
+
+// export interface IList{
+//   value?: string | number | null,
+//   index?: number | null,
+//   head?: IHead,
+//   tail?: number | null,
+//   state?: ElementStates,
+// }

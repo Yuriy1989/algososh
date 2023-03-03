@@ -4,7 +4,7 @@ import { useForm } from "../../utils/hooks";
 import { Button } from "../ui/button/button";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import queue from './queue.module.css';
-import { IQueueElements } from "../../types/types";
+import { IQueueElements, actions } from "../../types/types";
 import { Input } from "../ui/input/input";
 import { newQueue } from '../../utils/algorithms/queue';
 import { Circle } from "../ui/circle/circle";
@@ -12,11 +12,12 @@ import { Circle } from "../ui/circle/circle";
 export const QueuePage: React.FC = () => {
 
   const { values, setValues } = useForm({ text: '' });
-  const [list, setList] = useState<Array<IQueueElements> | null>();
-  const [size, setSize] = useState<number>(0);
-  const [reload, setReload] = useState<boolean>(false);
-  const [steps, setSteps] = useState<boolean>(false);
+  const [list, setList] = useState<Array<IQueueElements> | null>(); //элементы в очереди
+  const [reload, setReload] = useState<boolean>(false); //необходим для обновления страницы после очистки
+  const [steps, setSteps] = useState<boolean>(false); //шаг для включения анимации
+  const [action, setAction] = useState<actions | null>(); //тип действия с очередью
 
+  //сбор данных с input
   const onButtonActive = (e: {
     target: any; preventDefault: () => void;
   }) => {
@@ -24,6 +25,7 @@ export const QueuePage: React.FC = () => {
     setValues({ text: value });
   }
 
+  //очистка всего
   const handleClickReset = () => {
     setList(null);
     setValues({ text: '' });
@@ -31,6 +33,7 @@ export const QueuePage: React.FC = () => {
     setReload(true);
   }
 
+  //добавление элемента
   const handleClickPush = () => {
     if (values.text) {
       const headTail = newQueue.getHeadTail();
@@ -39,128 +42,84 @@ export const QueuePage: React.FC = () => {
       }
     }
     setSteps(true);
+    setAction(actions.Push);
   }
 
+  //удаление элемента
   const handleClickPop = () => {
     const headTail = newQueue.getHeadTail();
     if (list?.length) {
       list[headTail.head].state = ElementStates.Changing;
     }
     setSteps(true);
+    setAction(actions.Pop);
   }
 
-  console.log(list);
-
+  //сбор элементов из очереди
   const stepsAnimations = () => {
     let temp: Array<IQueueElements> = [];
     const headTail = newQueue.getHeadTail();
     let elements = newQueue.getContainer();
     if (elements) {
       let i = 0;
-      while (elements.length > i) {
-        if (!elements[i]) {
-          temp.push({
-            value: '',
-            index: i,
-            head: headTail.head,
-            tail: headTail.tail,
-            state: ElementStates.Default,
-          });
-          i++;
-        } else {
-          elements.map((item, index) => {
-            temp.push({
-              value: item,
-              index: index,
-              head: headTail.head,
-              tail: headTail.tail,
-              state: ElementStates.Default,
-            });
-            i++;
-          })
-        }
-      }
+      elements.map((item, index) => {
+        temp.push({
+          value: item,
+          index: index,
+          head: headTail.head === i ? headTail.head : null,
+          tail: (headTail.tail-1) === i ? headTail.tail-1 : null,
+          state: ElementStates.Default,
+        });
+        i++;
+      })
     }
     setList(temp);
+    setAction(null);
   }
 
+  //анимация с задержкой
   useEffect(() => {
-    console.log("here");
     setTimeout(() => {
-      console.log("here ---");
-      if (values.text) {
-        console.log("here push");
+      if (action === actions.Push && values.text) {
         newQueue.enqueue(values.text);
-        let temp: Array<IQueueElements> = [];
-        const headTail = newQueue.getHeadTail();
-        let elements = newQueue.getContainer();
-        if (elements) {
-          let i = 0;
-          while (elements.length > i) {
-            if (!elements[i]) {
-              temp.push({
-                value: '',
-                index: i,
-                head: headTail.head,
-                tail: headTail.tail,
-                state: ElementStates.Default,
-              });
-              i++;
-            } else {
-              elements.map((item, index) => {
-                temp.push({
-                  value: item,
-                  index: index,
-                  head: headTail.head,
-                  tail: headTail.tail,
-                  state: ElementStates.Default,
-                });
-                i++;
-              })
-            }
-          }
-        }
-        setList(temp);
-      } else {
-        console.log("here pop");
-        // newQueue.dequeue();
-        // stepsAnimations();
+        stepsAnimations();
+      } else if (action === actions.Pop) {
+        newQueue.dequeue();
+        stepsAnimations();
       }
-    }, 1000)
+    }, 500)
     setValues({ text: '' });
     setSteps(false);
+    setAction(null);
   }, [steps])
 
+  //первоначальная отрисовка пустой очереди
   useEffect(() => {
-    setSize(newQueue.getSize());
     let temp: Array<IQueueElements> = [];
     let elements = newQueue.getContainer();
-
-    if(elements) {
-      if(!elements[0]) {
-        let i = 0;
-        while(elements.length > i) {
-          temp.push({
-            value: '',
-            index: i,
-            state: ElementStates.Default,
-          });
-          i++;
-        }
+    if (elements) {
+      let i = 0;
+      while (elements.length > i) {
+        temp.push({
+          value: null,
+          index: i,
+          state: ElementStates.Default,
+        });
+        i++;
       }
     }
     setList(temp);
     setReload(false);
   }, [reload])
 
+  //создание контента
   const createContent = () => {
     let content = [];
     let i = 0;
-
     if (list) {
       while (i < list.length) {
         content.push(<Circle
-          letter={`${list[i].value}`}
+          letter={list[i].value ? `${list[i].value}` : ''}
           head={list[i].head === i ? "head" : ''}
           tail={list[i].tail === i ? "tail" : ''}
           state={list[i].state}
@@ -198,7 +157,7 @@ export const QueuePage: React.FC = () => {
             />
             <Button
               onClick={handleClickPop}
-              // disabled={!list ? true : false}
+              disabled={newQueue.isEmpty()}
               type="button"
               text="Удалить"
               extraClass={`${queue.mr80}`}
@@ -206,12 +165,12 @@ export const QueuePage: React.FC = () => {
           </div>
           <Button
             onClick={handleClickReset}
-            // disabled={!list ? true : false}
+            disabled={newQueue.isEmpty()}
             type="reset"
             text="Очистить"
           />
         </form>
-        {size &&
+        {list &&
           <div className={queue.circle}>
             {createContent()}
           </div>
