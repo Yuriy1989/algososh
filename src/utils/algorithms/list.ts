@@ -1,4 +1,3 @@
-import { ElementStates } from "../../types/element-states";
 import { ILinkedList } from "../../types/types";
 
   class Node<T> {
@@ -51,9 +50,11 @@ import { ILinkedList } from "../../types/types";
 
       if(this.head.next){
         this.head = this.head.next;
+        this.size--;
       } else {
         this.head = null;
         this.tail = null;
+        this.size--;
       }
     }
 
@@ -86,11 +87,9 @@ import { ILinkedList } from "../../types/types";
       } else {
         const node = new Node(element);
         if (index === 0) {
-          console.log("this.head =", this.head);
           node.next = this.head;
           this.head = node;
         } else {
-          console.log("this.next =", this.head);
           let curr = this.head;
           let currIndex = 0;
           while (currIndex < index-1) {

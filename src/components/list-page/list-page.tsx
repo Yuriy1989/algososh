@@ -23,50 +23,232 @@ export const ListPage: React.FC = () => {
     setValues( { ...values, [name]: value} );
   }
 
-  const handleClickPushHead = () => {
-    if (values.text && list) {
+  async function animation(task: string, indexSearch?: number, text?: string, list?: Array<IList> ) {
+    if(task === "pushHead") {
+      await waitFor(500);
+      animationPushHead1();
 
-      list[0].temp = values.text;
-      list[0].top = values.text;
-      setSteps(true);
+      await waitFor(500);
+      animationPushHead2();
+    }
 
-      setTimeout(() => {
-        if(values.text) {
-          listAlg.prepend(values.text)
-          getElements();
+    if(task === "pushTail") {
+      await waitFor(500);
+      animationPushTail1();
+
+      await waitFor(500);
+      animationPushTail2();
+    }
+
+    if(task === "deleteHead") {
+      await waitFor(500);
+      animationDeleteHead();
+    }
+
+    if(task === "deleteTail") {
+      await waitFor(500);
+      animationDeleteTail();
+    }
+
+    if(task === "pushOnIndex") {
+
+      let i = 0;
+      if (indexSearch) {
+        while(i <= indexSearch) {
+          console.log("i=", i, "index = ", indexSearch);
+
+          list?.map(async (item, index) => {
+            if(index === 0) {
+              return
+            } else {
+              await waitFor(500);
+              animationPushOnIndex1(item, index);
+            }
+          })
+          i++;
         }
-      }, 500);
+      }
+
+      // await waitFor(500);
+      // animationPushOnIndex1();
+
+      await waitFor(500);
+      animationPushOnIndex2();
+    }
+
+    if(task === "deleteOnIndex") {
+      await waitFor(500);
+      // animationDeleteOnIndex();
     }
   }
 
-  const handleClickPushTail = () => {
+  function animationPushHead1() {
+    if(list) {
+      list[0].temp = null;
+      list[0].top = null;
+
+      list.unshift({
+        value: values.text,
+        state: ElementStates.Modified,
+        top: null,
+        bottom: null,
+        temp: null
+      })
+      setList(list);
+      setSteps(true);
+    }
+  }
+
+  function animationPushHead2() {
+    if (values.text) {
+      listAlg.prepend(values.text)
+      getElements();
+    }
+  }
+
+  function animationPushOnIndex1(item: IList, index: number) {
+    if(list) {
+      list[index-1].temp = null;
+      list[index-1].top = null;
+      list[index-1].state = ElementStates.Modified;
+      list[index].temp = values.text;
+      list[index].top = values.text;
+
+      // list.unshift({
+      //   value: values.text,
+      //   state: ElementStates.Modified,
+      //   top: null,
+      //   bottom: null,
+      //   temp: null
+      // })
+      setList(list);
+      setSteps(true);
+    }
+  }
+
+  function animationPushOnIndex2() {
+    if (values.text && values.index) {
+      listAlg.insertAt(values.text, Number(values.index));
+      getElements();
+    }
+  }
+
+  function animationPushTail1() {
+    if(list) {
+      list[list.length-1].temp = null;
+      list[list.length-1].top = null;
+
+      list.push({
+        value: values.text,
+        state: ElementStates.Modified,
+        top: null,
+        bottom: null,
+        temp: null
+      })
+      setList(list);
+      setSteps(true);
+    }
+  }
+
+  function animationPushTail2() {
     if (values.text) {
       listAlg.append(values.text)
       getElements();
     }
   }
 
-  const handleClickDeleteHead = () => {
+  function animationDeleteHead() {
     listAlg.deleteHead();
     getElements();
   }
 
-  const handleClickDeleteTail = () => {
+  function animationDeleteTail() {
     listAlg.deleteTail();
     getElements();
   }
 
+  function waitFor(msec: number | undefined) {
+    return new Promise(resolve => setTimeout(resolve, msec))
+  }
+
+  const handleClickPushHead = () => {
+    if (values.text && list) {
+      if (listAlg.getSize()) {
+        const pushHead = "pushHead";
+        list[0].temp = values.text;
+        list[0].top = values.text;
+        setSteps(true);
+        animation(pushHead);
+      } else {
+        if (values.text) {
+          listAlg.prepend(values.text)
+          getElements();
+        }
+      }
+    }
+  }
+
+  const handleClickPushTail = () => {
+    if (values.text && list) {
+      if (listAlg.getSize()) {
+        const pushTail = "pushTail";
+        list[list.length - 1].temp = values.text;
+        list[list.length - 1].top = values.text;
+        setSteps(true);
+        animation(pushTail);
+      } else {
+        if (values.text) {
+          listAlg.append(values.text)
+          getElements();
+        }
+      }
+    }
+  }
+
+  const handleClickDeleteHead = () => {
+    if (list) {
+      const deleteHead = "deleteHead";
+      list[0].temp = list[0].value;
+      list[0].bottom = list[0].value;
+      list[0].value = null;
+      setSteps(true);
+
+      animation(deleteHead);
+    }
+  }
+
+  const handleClickDeleteTail = () => {
+    if (list) {
+      const deleteTail = "deleteTail";
+      list[list.length-1].temp = list[list.length-1].value;
+      list[list.length-1].bottom = list[list.length-1].value;
+      list[list.length-1].value = null;
+      setSteps(true);
+
+      animation(deleteTail);
+    }
+  }
+
   const handleClickPushOnIndex = () => {
-    if (values.text && values.index) {
-      console.log(listAlg.insertAt(values.text, Number(values.index)));
-      getElements();
+    if (list && values.text && values.index) {
+      if (listAlg.getSize()) {
+        const pushOnIndex = "pushOnIndex";
+        list[0].temp = values.text;
+        list[0].top = values.text;
+        setSteps(true);
+        animation(pushOnIndex, values.index, values.text, list);
+      } else {
+        if (values.text && values.index === 0) {
+          listAlg.prepend(values.text)
+          getElements();
+        }
+      }
     }
   }
 
   const handleClickDeleteOnIndex = () => {
     if (values.index) {
-      console.log(listAlg.deleteAt(Number(values.index)));
-      console.log("getSize", listAlg.getSize());
+      listAlg.deleteAt(Number(values.index));
       getElements();
     }
   }
@@ -79,7 +261,7 @@ export const ListPage: React.FC = () => {
         content.push(
           <div key={index} className={listStyle.circle}>
             <Circle
-              letter={`${item.value}`}
+              letter={item.value !== null ? `${item.value}` : ''}
               state={item.state}
               index={index}
               key={index}
@@ -88,7 +270,7 @@ export const ListPage: React.FC = () => {
                 letter={`${item.temp}`}
                 isSmall={true}
                 state={ElementStates.Changing}
-              /> : index === 0 ? "head" : ""
+              /> : (index === 0 && item.value !== null) ? "head" : ""
               }
               tail={
                 item.bottom !== null ? <Circle
@@ -136,7 +318,6 @@ export const ListPage: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    // getElements();
     setSteps(false);
   }, [steps])
 

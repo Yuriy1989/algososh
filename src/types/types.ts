@@ -63,18 +63,12 @@ export interface ILinkedList<T> {
   print: () => void;
 }
 
-interface IHead {
-  value: 0,
-  next: Node
-}
 
 export interface IList{
   value?: string | number | null,
   index?: number | null,
-  head?: IHead,
-  tail?: number | null,
-  top?: string | null,
-  bottom?: string | null,
-  temp?: string | null,
+  top?: string | number | null,
+  bottom?: string | number | null,
+  temp?: string | number | null,
   state?: ElementStates,
 }
