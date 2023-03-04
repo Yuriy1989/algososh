@@ -55,10 +55,23 @@
   width: 362px;
 }
 
-.circle {
+.circles {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 477px;
+}
+
+.circle {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.arrow {
+  margin: 0 12px;
 }

@@ -73,5 +73,8 @@ export interface IList{
   index?: number | null,
   head?: IHead,
   tail?: number | null,
+  top?: string | null,
+  bottom?: string | null,
+  temp?: string | null,
   state?: ElementStates,
 }

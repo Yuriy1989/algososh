@@ -1,4 +1,3 @@
-import userEvent from "@testing-library/user-event";
 import React, { useEffect, useState } from "react";
 import { ElementStates } from "../../types/element-states";
 import { IList } from "../../types/types";
@@ -15,6 +14,7 @@ export const ListPage: React.FC = () => {
 
   const { values, setValues } = useForm({ text: '' , index: null});
   const [list, setList] = useState<Array<IList> | null>(null);
+  const [steps, setSteps] = useState<boolean>(false);
 
   const onButtonActive = (e: {
     target: any; preventDefault: () => void;
@@ -23,42 +23,107 @@ export const ListPage: React.FC = () => {
     setValues( { ...values, [name]: value} );
   }
 
-  const handleClickReset = () => {
-    // setList(null);
-    // setSteps(0);
-    // newStack.clearContainet();
-  }
-
   const handleClickPushHead = () => {
+    if (values.text && list) {
 
+      list[0].temp = values.text;
+      list[0].top = values.text;
+      setSteps(true);
+
+      setTimeout(() => {
+        if(values.text) {
+          listAlg.prepend(values.text)
+          getElements();
+        }
+      }, 500);
+    }
   }
 
   const handleClickPushTail = () => {
+    if (values.text) {
+      listAlg.append(values.text)
+      getElements();
+    }
+  }
 
+  const handleClickDeleteHead = () => {
+    listAlg.deleteHead();
+    getElements();
+  }
+
+  const handleClickDeleteTail = () => {
+    listAlg.deleteTail();
+    getElements();
+  }
+
+  const handleClickPushOnIndex = () => {
+    if (values.text && values.index) {
+      console.log(listAlg.insertAt(values.text, Number(values.index)));
+      getElements();
+    }
+  }
+
+  const handleClickDeleteOnIndex = () => {
+    if (values.index) {
+      console.log(listAlg.deleteAt(Number(values.index)));
+      console.log("getSize", listAlg.getSize());
+      getElements();
+    }
   }
 
   const createContent = () => {
     let content: JSX.Element[] = [];
     let i = 0;
-    if(list) {
+    if (list) {
       list.map((item, index) => {
         content.push(
-          <>
-          <Circle
-            letter={`${item.value}`}
-            // head={list[i].head === i ? "head" : ''}
-            // tail={list[i].tail === i ? "tail" : ''}
-            state={item.state}
-            extraClass={listStyle.mr12}
-            index={i}
-            key={i}
-          />
-          <ArrowIcon />
-          </>
+          <div key={index} className={listStyle.circle}>
+            <Circle
+              letter={`${item.value}`}
+              state={item.state}
+              index={index}
+              key={index}
+              head={
+                item.top !== null ? <Circle
+                letter={`${item.temp}`}
+                isSmall={true}
+                state={ElementStates.Changing}
+              /> : index === 0 ? "head" : ""
+              }
+              tail={
+                item.bottom !== null ? <Circle
+                  letter={`${item.temp}`}
+                  isSmall={true}
+                  state={ElementStates.Changing}
+                /> : index === list.length - 1 ? "tail" : ""
+              }
+            />
+            {list.length-1 > index &&
+              <div className={listStyle.arrow}>
+                <ArrowIcon key={index}/>
+              </div>
+            }
+          </div>
         );
       })
     }
     return content;
+  }
+
+  const getElements = () => {
+    let temp: Array<IList> = [];
+    listAlg.print().map((item, index) => {
+      temp.push({
+        value: item,
+        index: index,
+        state: ElementStates.Default,
+        top: null,
+        bottom: null,
+        temp: null
+      })
+    })
+    setList(temp);
+    console.log(listAlg.getHeadTail());
   }
 
   useEffect(() => {
@@ -66,18 +131,14 @@ export const ListPage: React.FC = () => {
     listAlg.append(34);
     listAlg.append(8);
     listAlg.append(1);
-    let temp: Array<IList> = [];
-    listAlg.print().map((item, index) => {
-      temp.push({
-        value: item,
-        index: index,
-        state: ElementStates.Default,
-        // head: listAlg.getHeadTail(),
-      })
-    })
-    setList(temp);
-    console.log(listAlg.getHeadTail());
+    getElements();
+    setSteps(false);
   }, [])
+
+  useEffect(() => {
+    // getElements();
+    setSteps(false);
+  }, [steps])
 
   console.log("list = ", list);
 
@@ -113,14 +174,14 @@ export const ListPage: React.FC = () => {
                 extraClass={`${listStyle.mr12}`}
               />
               <Button
-                // onClick={handleClickPop}
+                onClick={handleClickDeleteHead}
                 // disabled={!list ? true : false}
                 type="button"
                 text="Удалить из head"
                 extraClass={`${listStyle.mr12}`}
               />
               <Button
-                // onClick={handleClickPop}
+                onClick={handleClickDeleteTail}
                 // disabled={!list ? true : false}
                 type="button"
                 text="Удалить из tail"
@@ -140,13 +201,13 @@ export const ListPage: React.FC = () => {
             </div>
             <Button
               // disabled={!values.text ? true : false}
-              // onClick={handleClickPush}
+              onClick={handleClickPushOnIndex}
               type="button"
               text="Добавить по индексу"
               extraClass={`${listStyle.mr12} ${listStyle.indexButtonWidth}`}
             />
             <Button
-              // onClick={handleClickPop}
+              onClick={handleClickDeleteOnIndex}
               // disabled={!list ? true : false}
               type="button"
               text="Удалить по индексу"
@@ -155,7 +216,7 @@ export const ListPage: React.FC = () => {
           </div>
         </form>
         {list &&
-          <div className={listStyle.circle}>
+          <div className={listStyle.circles}>
             {createContent()}
           </div>
         }
