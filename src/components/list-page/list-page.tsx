@@ -1,8 +1,12 @@
 import userEvent from "@testing-library/user-event";
 import React, { useEffect, useState } from "react";
-import { IList, listAlg } from "../../utils/algorithms/list";
+import { ElementStates } from "../../types/element-states";
+import { IList } from "../../types/types";
+import { listAlg } from "../../utils/algorithms/list";
 import { useForm } from "../../utils/hooks";
 import { Button } from "../ui/button/button";
+import { Circle } from "../ui/circle/circle";
+import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import listStyle from "./list.module.css";
@@ -33,6 +37,30 @@ export const ListPage: React.FC = () => {
 
   }
 
+  const createContent = () => {
+    let content: JSX.Element[] = [];
+    let i = 0;
+    if(list) {
+      list.map((item, index) => {
+        content.push(
+          <>
+          <Circle
+            letter={`${item.value}`}
+            // head={list[i].head === i ? "head" : ''}
+            // tail={list[i].tail === i ? "tail" : ''}
+            state={item.state}
+            extraClass={listStyle.mr12}
+            index={i}
+            key={i}
+          />
+          <ArrowIcon />
+          </>
+        );
+      })
+    }
+    return content;
+  }
+
   useEffect(() => {
     listAlg.append(0);
     listAlg.append(34);
@@ -43,7 +71,8 @@ export const ListPage: React.FC = () => {
       temp.push({
         value: item,
         index: index,
-        head: listAlg.getHeadTail(),
+        state: ElementStates.Default,
+        // head: listAlg.getHeadTail(),
       })
     })
     setList(temp);
@@ -125,16 +154,11 @@ export const ListPage: React.FC = () => {
             />
           </div>
         </form>
-        {/* {size && */}
-        <>
-          {/* <div className={queue.circle}>
-              {test()}
-            </div> */}
-          {/* <div className={queue.circle}> */}
-          {/* {test2()} */}
-          {/* </div> */}
-        </>
-        {/* } */}
+        {list &&
+          <div className={listStyle.circle}>
+            {createContent()}
+          </div>
+        }
       </div>
     </SolutionLayout>
   );

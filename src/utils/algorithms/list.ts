@@ -1,14 +1,6 @@
 import { ElementStates } from "../../types/element-states";
 import { ILinkedList } from "../../types/types";
 
-export interface IList{
-  value?: string | number | null,
-  index?: number | null,
-  head?: Node<T>,
-  tail?: number | null,
-  state?: ElementStates,
-}
-
   class Node<T> {
     value: T
     next: Node<T> | null
@@ -89,6 +81,7 @@ export interface IList{
     getHeadTail() {
       return this.head
     }
+
   }
 
   export const listAlg = new LinkedList<string | number>();

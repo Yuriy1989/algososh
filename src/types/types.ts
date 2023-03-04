@@ -68,10 +68,10 @@ interface IHead {
   next: Node
 }
 
-// export interface IList{
-//   value?: string | number | null,
-//   index?: number | null,
-//   head?: IHead,
-//   tail?: number | null,
-//   state?: ElementStates,
-// }
+export interface IList{
+  value?: string | number | null,
+  index?: number | null,
+  head?: IHead,
+  tail?: number | null,
+  state?: ElementStates,
+}
