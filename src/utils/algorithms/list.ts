@@ -133,8 +133,8 @@ import { ILinkedList } from "../../types/types";
             this.tail = beforeNodeToDelete.next;
           }
         }
+        this.size--;
       }
-      this.size--;
     }
 
     getSize() {

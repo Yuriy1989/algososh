@@ -24,6 +24,15 @@ export enum actions {
   Pop = "pop",
 }
 
+export enum tasks {
+  PushHead = "pushHead",
+  PushTail = "pushTail",
+  DeleteHead = "deleteHead",
+  DeleteTail = "deleteTail",
+  PushOnIndex = "pushOnIndex",
+  DeleteOnIndex = "deleteOnIndex",
+}
+
 export interface IButton {
   active: boolean,
   textbutton : string,

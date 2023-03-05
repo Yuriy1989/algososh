@@ -32,7 +32,7 @@ import { IQueue } from "../../types/types";
       }
 
       this.container[this.tail % this.size] = item;
-      this.tail++;
+      this.tail = (this.tail + 1) % this.size;;
       this.length++;
     };
 
@@ -42,7 +42,7 @@ import { IQueue } from "../../types/types";
       }
 
       this.container[this.head % this.size] = null;
-      this.head++;
+      this.head = (this.head + 1) % this.size;;
       this.length--;
     };
 

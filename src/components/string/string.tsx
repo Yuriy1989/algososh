@@ -59,11 +59,11 @@ export const StringComponent: FC = () => {
             {
               list[steps].mas.map((item, index) => {
                 if (list[steps]?.changing?.includes(index)) {
-                  return <Circle state={ElementStates.Changing} letter={item} key={index} />
+                  return <Circle state={ElementStates.Changing} letter={item} key={index} extraClass={`${string.mr12}`}/>
                 } else if (list[steps]?.modified?.includes(index)) {
-                  return <Circle state={ElementStates.Modified} letter={item} key={index} />
+                  return <Circle state={ElementStates.Modified} letter={item} key={index} extraClass={`${string.mr12}`}/>
                 } else {
-                  return <Circle state={ElementStates.Default} letter={item} key={index} />
+                  return <Circle state={ElementStates.Default} letter={item} key={index} extraClass={`${string.mr12}`}/>
                 }
               })
             }
