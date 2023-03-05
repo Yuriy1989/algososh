@@ -90,7 +90,7 @@ const choice = (arr: Array<number>, minmax: string): Array<IStepsSorting> => {
         }
       }
     }
-    if(maxInd != i){
+    if(maxInd !== i){
       swap(arr, maxInd, i);
     }
     mod.push(i);

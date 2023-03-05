@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { HEAD, TAIL } from "../../constants/element-captions";
+import { SHORT_MAX_LENGTH_STRING } from "../../constants/input";
 import { ElementStates } from "../../types/element-states";
 import { IList, tasks } from "../../types/types";
 import { listAlg } from "../../utils/algorithms/list";
@@ -28,28 +31,28 @@ export const ListPage: React.FC = () => {
   //создание анимации в свазивисимости от задачи
   async function animation(task: tasks, indexSearch?: number, text?: string, list?: Array<IList> ) {
     if(task === tasks.PushHead) {
-      await waitFor(500);
+      await waitFor(SHORT_DELAY_IN_MS);
       animationPushHead1();
 
-      await waitFor(500);
+      await waitFor(SHORT_DELAY_IN_MS);
       animationPushHead2();
     }
 
     if(task === tasks.PushTail) {
-      await waitFor(500);
+      await waitFor(SHORT_DELAY_IN_MS);
       animationPushTail1();
 
-      await waitFor(500);
+      await waitFor(SHORT_DELAY_IN_MS);
       animationPushTail2();
     }
 
     if(task === tasks.DeleteHead) {
-      await waitFor(500);
+      await waitFor(SHORT_DELAY_IN_MS);
       animationDeleteHead();
     }
 
     if(task === tasks.DeleteTail) {
-      await waitFor(500);
+      await waitFor(SHORT_DELAY_IN_MS);
       animationDeleteTail();
     }
 
@@ -57,16 +60,16 @@ export const ListPage: React.FC = () => {
       if (indexSearch && list) {
         let i = 0;
         while (i <= indexSearch) {
-          await waitFor(500);
+          await waitFor(SHORT_DELAY_IN_MS);
           animationPushOnIndex1(list[i], i);
           i++;
         }
       }
 
-      await waitFor(500);
+      await waitFor(SHORT_DELAY_IN_MS);
       animationPushOnIndex2(indexSearch);
 
-      await waitFor(500);
+      await waitFor(SHORT_DELAY_IN_MS);
       animationPushOnIndex3();
     }
 
@@ -74,16 +77,16 @@ export const ListPage: React.FC = () => {
       if (indexSearch && list) {
         let i = 0;
         while (i <= indexSearch) {
-          await waitFor(500);
+          await waitFor(SHORT_DELAY_IN_MS);
           animationDeleteOnIndex1(list[i], i);
           i++;
         }
       }
 
-      await waitFor(500);
+      await waitFor(SHORT_DELAY_IN_MS);
       animationDeleteOnIndex2(indexSearch);
 
-      await waitFor(500);
+      await waitFor(SHORT_DELAY_IN_MS);
       animationDeleteOnIndex3();
     }
   }
@@ -335,7 +338,7 @@ export const ListPage: React.FC = () => {
     let content: JSX.Element[] = [];
     let i = 0;
     if (list) {
-      list.map((item, index) => {
+      list.forEach((item, index) => {
         content.push(
           <div key={index} className={listStyle.circle}>
             <Circle
@@ -348,14 +351,14 @@ export const ListPage: React.FC = () => {
                 letter={`${item.temp}`}
                 isSmall={true}
                 state={ElementStates.Changing}
-              /> : (index === 0 && item.value !== null) ? "head" : ""
+              /> : (index === 0 && item.value !== null) ? `${HEAD}` : ""
               }
               tail={
                 item.bottom !== null ? <Circle
                   letter={`${item.temp}`}
                   isSmall={true}
                   state={ElementStates.Changing}
-                /> : index === list.length - 1 ? "tail" : ""
+                /> : index === list.length - 1 ? `${TAIL}` : ""
               }
             />
             {list.length-1 > index &&
@@ -373,7 +376,7 @@ export const ListPage: React.FC = () => {
   //Выгрузка всех элементов из связанного списка
   const getElements = () => {
     let temp: Array<IList> = [];
-    listAlg.print().map((item, index) => {
+    listAlg.print().forEach((item, index) => {
       temp.push({
         value: item,
         index: index,
@@ -411,7 +414,7 @@ export const ListPage: React.FC = () => {
                 onChange={onButtonActive}
                 value={`${values.text}`}
                 placeholder="Введите значение"
-                maxLength={4}
+                maxLength={SHORT_MAX_LENGTH_STRING}
                 extraClass={`${listStyle.inputWidth}`}
               />
               <span>Максимум - 4 символа</span>

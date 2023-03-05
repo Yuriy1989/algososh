@@ -4,16 +4,19 @@ import { useForm } from "../../utils/hooks";
 import { Button } from "../ui/button/button";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import stack from './stack.module.css';
-import { IStackSteps } from "../../types/types";
+import { ILoader, IStackSteps, Task } from "../../types/types";
 import { Input } from "../ui/input/input";
 import { newStack } from '../../utils/algorithms/stack';
 import { Circle } from "../ui/circle/circle";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { SHORT_MAX_LENGTH_STRING } from "../../constants/input";
 
 export const StackPage: React.FC = () => {
 
 const {values, setValues} = useForm({text: ''});
 const [list, setList] = useState<Array<IStackSteps<String>> | null>(null);
 const [steps, setSteps] = useState<number>(0);
+const [loader, serLoader] = useState<ILoader>({state: false, task: null});
 
 const onButtonActive = (e: {
   target: any; preventDefault: () => void;
@@ -22,11 +25,11 @@ const onButtonActive = (e: {
   setValues({ text: value });
 }
 
-
 const handleClickReset = () => {
   setList(null);
   setSteps(0);
   newStack.clearContainet();
+  serLoader({ state: true, task: Task.Reset })
 }
 
 const handleClickPush = () => {
@@ -36,6 +39,7 @@ const handleClickPush = () => {
     setList(newStack.push(values.text));
   }
   setValues({ text: '' });
+  serLoader({ state: true, task: Task.Push })
 }
 
 const handleClickPop = () => {
@@ -45,12 +49,14 @@ const handleClickPop = () => {
   if(size) {
     setList(newStack.pop());
   }
+  serLoader({ state: true, task: Task.Pop })
 }
 
 useEffect(() => {
   setTimeout(() => {
     setSteps(steps+1);
-  }, 500);
+    serLoader({ state: false, task: null })
+  }, SHORT_DELAY_IN_MS);
 }, [list])
 
   return (
@@ -63,31 +69,35 @@ useEffect(() => {
               onChange={onButtonActive}
               value={`${values.text}`}
               placeholder={'Введите текст'}
-              maxLength={4}
+              maxLength={SHORT_MAX_LENGTH_STRING}
+              disabled={loader.state ? true : false}
             />
-            <span>Максимум - 4 символа</span>
+            <span>Максимум - {SHORT_MAX_LENGTH_STRING} символа</span>
           </div>
           <div className={stack.button}>
             <Button
-              disabled={!values.text ? true : false}
+              disabled={!values.text || loader.state ? true : false}
               onClick={handleClickPush}
               type="button"
               text="Добавить"
               extraClass={`${stack.mr12}`}
+              isLoader={loader.state && loader.task === Task.Push}
             />
             <Button
               onClick={handleClickPop}
-              disabled={!list ? true : false}
+              disabled={!list || loader.state ? true : false}
               type="button"
               text="Удалить"
               extraClass={`${stack.mr80}`}
+              isLoader={loader.state && loader.task === Task.Pop}
             />
           </div>
           <Button
             onClick={handleClickReset}
-            disabled={!list ? true : false}
+            disabled={!list || loader.state ? true : false}
             type="reset"
             text="Очистить"
+            isLoader={loader.state && loader.task === Task.Reset}
           />
         </form>
         {list &&

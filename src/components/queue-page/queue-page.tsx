@@ -4,10 +4,13 @@ import { useForm } from "../../utils/hooks";
 import { Button } from "../ui/button/button";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import queue from './queue.module.css';
-import { IQueueElements, actions } from "../../types/types";
+import { IQueueElements, actions, ILoader, Task } from "../../types/types";
 import { Input } from "../ui/input/input";
 import { newQueue } from '../../utils/algorithms/queue';
 import { Circle } from "../ui/circle/circle";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { SHORT_MAX_LENGTH_STRING } from "../../constants/input";
+import { HEAD, TAIL } from "../../constants/element-captions";
 
 export const QueuePage: React.FC = () => {
 
@@ -16,6 +19,7 @@ export const QueuePage: React.FC = () => {
   const [reload, setReload] = useState<boolean>(false); //необходим для обновления страницы после очистки
   const [steps, setSteps] = useState<boolean>(false); //шаг для включения анимации
   const [action, setAction] = useState<actions | null>(); //тип действия с очередью
+  const [loader, setLoader] = useState<ILoader>({state: false, task: null}); // состояние disabled и isLoader кнопок и input
 
   //сбор данных с input
   const onButtonActive = (e: {
@@ -31,6 +35,7 @@ export const QueuePage: React.FC = () => {
     setValues({ text: '' });
     newQueue.clearContainet();
     setReload(true);
+    setLoader({ state: true, task: Task.Reset })
   }
 
   //добавление элемента
@@ -43,6 +48,7 @@ export const QueuePage: React.FC = () => {
     }
     setSteps(true);
     setAction(actions.Push);
+    setLoader({ state: true, task: Task.Push })
   }
 
   //удаление элемента
@@ -53,6 +59,7 @@ export const QueuePage: React.FC = () => {
     }
     setSteps(true);
     setAction(actions.Pop);
+    setLoader({ state: true, task: Task.Pop })
   }
 
   //сбор элементов из очереди
@@ -75,6 +82,7 @@ export const QueuePage: React.FC = () => {
     }
     setList(temp);
     setAction(null);
+    setLoader({ state: false, task: null })
   }
 
   //анимация с задержкой
@@ -87,7 +95,7 @@ export const QueuePage: React.FC = () => {
         newQueue.dequeue();
         stepsAnimations();
       }
-    }, 500)
+    }, SHORT_DELAY_IN_MS)
     setValues({ text: '' });
     setSteps(false);
     setAction(null);
@@ -110,6 +118,7 @@ export const QueuePage: React.FC = () => {
     }
     setList(temp);
     setReload(false);
+    setLoader({ state: false, task: null })
   }, [reload])
 
   //создание контента
@@ -120,8 +129,8 @@ export const QueuePage: React.FC = () => {
       while (i < list.length) {
         content.push(<Circle
           letter={list[i].value ? `${list[i].value}` : ''}
-          head={list[i].head === i ? "head" : ''}
-          tail={list[i].tail === i ? "tail" : ''}
+          head={list[i].head === i ? `${HEAD}` : ''}
+          tail={list[i].tail === i ? `${TAIL}` : ''}
           state={list[i].state}
           extraClass={queue.mr12}
           index={i}
@@ -143,31 +152,35 @@ export const QueuePage: React.FC = () => {
               onChange={onButtonActive}
               value={`${values.text}`}
               placeholder={'Введите текст'}
-              maxLength={4}
+              maxLength={SHORT_MAX_LENGTH_STRING}
+              disabled={loader.state ? true : false}
             />
-            <span>Максимум - 4 символа</span>
+            <span>Максимум - {SHORT_MAX_LENGTH_STRING} символа</span>
           </div>
           <div className={queue.button}>
             <Button
-              disabled={!values.text ? true : false}
+              disabled={!values.text || loader.state ? true : false}
               onClick={handleClickPush}
               type="button"
               text="Добавить"
               extraClass={`${queue.mr12}`}
+              isLoader={loader.state && loader.task === Task.Push}
             />
             <Button
               onClick={handleClickPop}
-              disabled={newQueue.isEmpty()}
+              disabled={newQueue.isEmpty() || loader.state ? true : false}
               type="button"
               text="Удалить"
               extraClass={`${queue.mr80}`}
+              isLoader={loader.state && loader.task === Task.Pop}
             />
           </div>
           <Button
             onClick={handleClickReset}
-            disabled={newQueue.isEmpty()}
+            disabled={newQueue.isEmpty() || loader.state ? true : false}
             type="reset"
             text="Очистить"
+            isLoader={loader.state && loader.task === Task.Reset}
           />
         </form>
         {list &&

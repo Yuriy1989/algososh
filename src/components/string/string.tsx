@@ -8,6 +8,8 @@ import { permutation } from "../../utils/algorithms/string";
 import { Circle } from "../ui/circle/circle";
 import string from './string.module.css';
 import { ISteps } from "../../types/types";
+import { DELAY_IN_MS } from "../../constants/delays";
+import { MEAN_MAX_LENGTH_STRING } from "../../constants/input";
 
 export const StringComponent: FC = () => {
 
@@ -35,7 +37,7 @@ export const StringComponent: FC = () => {
 
     setTimeout(() => {
       setSteps(steps+1);
-    }, 1000);
+    }, DELAY_IN_MS);
   }, [steps, list])
 
   return (
@@ -48,9 +50,9 @@ export const StringComponent: FC = () => {
               onChange={handleChange}
               value={`${values.text}`}
               placeholder={'Введите текст'}
-              maxLength={11}
+              maxLength={MEAN_MAX_LENGTH_STRING}
             />
-            <span>Максимум - 11 символов</span>
+            <span>Максимум - {MEAN_MAX_LENGTH_STRING} символов</span>
           </div>
           <Button isLoader={button} type="submit" text="Развернуть" />
         </form>

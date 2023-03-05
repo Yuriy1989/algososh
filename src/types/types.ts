@@ -81,3 +81,14 @@ export interface IList{
   temp?: string | number | null,
   state?: ElementStates,
 }
+
+export enum Task {
+  Push = "push",
+  Reset = "reset",
+  Pop = "pop",
+}
+
+export interface ILoader {
+  state: boolean,
+  task: Task | null
+}

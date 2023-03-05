@@ -10,6 +10,7 @@ import { Direction } from "../../types/direction";
 import { RandomArr } from '../../utils/random';
 import { checkedRadio, IButton, IStepsSorting } from '../../types/types';
 import { Column } from '../ui/column/column';
+import { DELAY_IN_MS } from "../../constants/delays";
 
 export const SortingPage: React.FC = () => {
 
@@ -51,7 +52,7 @@ export const SortingPage: React.FC = () => {
 
     setTimeout(() => {
       setSteps(steps+1);
-    }, 1000);
+    }, DELAY_IN_MS);
   }, [steps, list])
 
   useEffect(() => {
@@ -64,13 +65,13 @@ export const SortingPage: React.FC = () => {
         <form className={sorting.form} onSubmit={handleClick}>
           <div className={sorting.input}>
             <div className={sorting.radioInput}>
-              <RadioInput onChange={onButtonActive} checked={values.check == checkedRadio.Choice ? true : false} label="Выбор" value="choice" name="sort" extraClass={`${sorting.radioInput_margin}`}/>
-              <RadioInput onChange={onButtonActive} checked={values.check == checkedRadio.Bubble ? true : false} label="Пузырёк" value="bubble" name="sort" extraClass={`${sorting.radioInput_margin}`}/>
+              <RadioInput onChange={onButtonActive} checked={values.check === checkedRadio.Choice ? true : false} label="Выбор" value="choice" name="sort" extraClass={`${sorting.radioInput_margin}`}/>
+              <RadioInput onChange={onButtonActive} checked={values.check === checkedRadio.Bubble ? true : false} label="Пузырёк" value="bubble" name="sort" extraClass={`${sorting.radioInput_margin}`}/>
             </div>
             <div className={sorting.button}>
               <Button
                 onClick={handleClickSorting}
-                disabled={button.textbutton != "По возрастанию" && button.textbutton ? true : false}
+                disabled={button.textbutton !== "По возрастанию" && button.textbutton ? true : false}
                 isLoader={button.textbutton === "По возрастанию" ? true : false}
                 type="button"
                 text="По возрастанию"
@@ -79,7 +80,7 @@ export const SortingPage: React.FC = () => {
               />
               <Button
                 onClick={handleClickSorting}
-                disabled={button.textbutton != "По убыванию" && button.textbutton ? true : false}
+                disabled={button.textbutton !== "По убыванию" && button.textbutton ? true : false}
                 isLoader={button.textbutton === "По убыванию" ? true : false}
                 type="button"
                 text="По убыванию"
@@ -88,7 +89,7 @@ export const SortingPage: React.FC = () => {
               />
             </div>
             <Button
-              disabled={button.textbutton != "Новый массивю" && button.textbutton ? true : false}
+              disabled={button.textbutton !== "Новый массивю" && button.textbutton ? true : false}
               isLoader={button.textbutton === "Новый массив" ? true : false}
               type="submit"
               text="Новый массив"

@@ -7,6 +7,9 @@ import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import fibonacci from "./fibonacci.module.css";
 import { fibonacciAlg } from '../../utils/algorithms/fibonacci';
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { MAX_LENGTH_STRING } from "../../constants/input";
+import { PATTERN_FIBONACCI } from "../../constants/pattern";
 
 export const FibonacciPage: React.FC = () => {
 
@@ -38,7 +41,7 @@ export const FibonacciPage: React.FC = () => {
       if(list){
         setNumb(list.slice(0, steps));
       }
-    }, 500);
+    }, SHORT_DELAY_IN_MS);
   }, [steps, list])
 
   return (
@@ -50,11 +53,11 @@ export const FibonacciPage: React.FC = () => {
               name={'numbers'}
               onChange={handleChange}
               value={`${values?.numbers}`}
-              max={19}
+              max={MAX_LENGTH_STRING}
               type={'number'}
-              pattern={`[1]-[19]`}
+              pattern={`${PATTERN_FIBONACCI}`}
             />
-            <span>Максимальное число - 19</span>
+            <span>Максимальное число - {MAX_LENGTH_STRING}</span>
           </div>
           <Button isLoader={button} type="submit" text="Рассчитать" />
         </form>
