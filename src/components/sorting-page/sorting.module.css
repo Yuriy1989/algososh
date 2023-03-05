@@ -1,0 +1,50 @@
+.sorting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width:100%;
+  margin-bottom: 50px;
+}
+
+.input {
+  display: flex;
+  flex-direction: row;
+}
+
+.radioInput {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.radioInput_margin {
+  margin-right: 40px;
+}
+
+.button {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.mr12 {
+  margin-right: 12px;
+}
+
+.mr80 {
+  margin-right: 80px;
+}
+
+.columns {
+  display: flex;
+  justify-content: center;
+  grid-column-gap: 10px;
+  align-items: end;
+}
