@@ -40,6 +40,19 @@ export const StringComponent: FC = () => {
     }, DELAY_IN_MS);
   }, [steps, list])
 
+
+  function lengthOfLongestSubstring(s: string): number {
+    let str = [];
+    for(let i = 0; i < s.length; i++) {
+      if(s.indexOf(s[i])) {
+
+      } else {
+        str.push(s[i]);
+      }
+    }
+    return 0;
+  }
+
   return (
     <SolutionLayout title="Строка">
       <div className={string.string}>
