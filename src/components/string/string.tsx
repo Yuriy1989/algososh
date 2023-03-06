@@ -63,31 +63,53 @@ export const StringComponent: FC = () => {
   // console.log(lengthOfLongestSubstring("q12q234y323"));
 
   interface ICounter {
-    index: number,
-    value: number
+    [key: number]: number
   }
 
   function collectFruits(fruits: number[]): number {
     const BASKET_COUNT = 2;
-    let str: string[] = [];
     let result = 0;
-    for(let i = 0; i < fruits.length; i++) {
-      // if(str.indexOf(fruits[i]) !== -1) {
-      //   str = [];
-      //   str.push(fruits[i]);
-      //   console.log("str NULL", str, "s[i]", fruits[i]);
-      // } else {
-      //   str.push(fruits[i]);
-      //   console.log("str PUSH", str, "s[i]", fruits[i]);
-      // }
-      // if(result < str.length) {
-      //   result = str.length;
-      // }
+    let currentSum = 0;
+    let counter = {};
+    for (let i = 0; i < 2 ; i++) {
+      counter = {
+        i: currentSum
+      }
+      currentSum +=  fruits[i];
     }
-    return 1;
+
+    for(let i = 0; i< fruits.length; i++) {
+
+    }
+    console.log("currentSum", currentSum);
+
+    return result;
   };
 
   console.log(collectFruits([1,1,3,4,5,1]));
+
+
+  function maxSumByDays(arr: number[], d: number) {
+    let maxSum = 0;
+    let currentSum = 0;
+    // вычисляем сумму первого окна
+    for (let i = 0; i < d; i++) {
+      currentSum += arr[i];
+      console.log("currentSum", currentSum, "i", i);
+    }
+
+    for (let i = d; i < arr.length; i++) {
+      // добавляем новый элемент в окно arr[i], удаляем старый arr[i - d]
+      currentSum += arr[i] - arr[i - d];
+      maxSum = Math.max(currentSum, maxSum);
+    }
+
+    return maxSum;
+  }
+
+  const days = [100, 200, 400, 700, 100, 300];
+
+  // console.log(maxSumByDays(days, 2));
 
   return (
     <SolutionLayout title="Строка">
