@@ -41,17 +41,53 @@ export const StringComponent: FC = () => {
   }, [steps, list])
 
 
-  function lengthOfLongestSubstring(s: string): number {
-    let str = [];
-    for(let i = 0; i < s.length; i++) {
-      if(s.indexOf(s[i])) {
+  // function lengthOfLongestSubstring(s: string): number {
+  //   let str: string[] = [];
+  //   let result = 0;
+  //   for(let i = 0; i < s.length; i++) {
+  //     if(str.indexOf(s[i]) !== -1) {
+  //       str = [];
+  //       str.push(s[i]);
+  //       console.log("str NULL", str, "s[i]", s[i]);
+  //     } else {
+  //       str.push(s[i]);
+  //       console.log("str PUSH", str, "s[i]", s[i]);
+  //     }
+  //     if(result < str.length) {
+  //       result = str.length;
+  //     }
+  //   }
+  //   return result;
+  // }
 
-      } else {
-        str.push(s[i]);
-      }
-    }
-    return 0;
+  // console.log(lengthOfLongestSubstring("q12q234y323"));
+
+  interface ICounter {
+    index: number,
+    value: number
   }
+
+  function collectFruits(fruits: number[]): number {
+    const BASKET_COUNT = 2;
+    let str: string[] = [];
+    let result = 0;
+    for(let i = 0; i < fruits.length; i++) {
+      // if(str.indexOf(fruits[i]) !== -1) {
+      //   str = [];
+      //   str.push(fruits[i]);
+      //   console.log("str NULL", str, "s[i]", fruits[i]);
+      // } else {
+      //   str.push(fruits[i]);
+      //   console.log("str PUSH", str, "s[i]", fruits[i]);
+      // }
+      // if(result < str.length) {
+      //   result = str.length;
+      // }
+    }
+    return 1;
+  };
+
+  console.log(collectFruits([1,1,3,4,5,1]));
 
   return (
     <SolutionLayout title="Строка">
