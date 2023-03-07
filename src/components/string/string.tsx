@@ -63,30 +63,40 @@ export const StringComponent: FC = () => {
   // console.log(lengthOfLongestSubstring("q12q234y323"));
 
   interface ICounter {
-    [key: number]: number
+    [key: string]: number
   }
+
+  // interface icer {
+  //   [key: string]: string
+  // }
+
+  // let cer:icer = {
+  //   "name": "Yura"
+  // }
+  // cer["sername"] = "Dudin";
+  // cer.sernames = "Dudin";
+  // console.log("cer", cer);
 
   function collectFruits(fruits: number[]): number {
     const BASKET_COUNT = 2;
     let result = 0;
-    let currentSum = 0;
-    let counter = {};
-    for (let i = 0; i < 2 ; i++) {
-      counter = {
-        i: currentSum
+    let counter: ICounter = {};
+    for (let i = 0; i < fruits.length; i++) {
+      let currentSum = 0;
+      for(let j = 0; j < fruits.length; j++) {
+        if(fruits[i] === fruits[j]) {
+          currentSum ++;
+          let n = fruits[i];
+          counter[n] = currentSum
+        }
       }
-      currentSum +=  fruits[i];
     }
-
-    for(let i = 0; i< fruits.length; i++) {
-
-    }
-    console.log("currentSum", currentSum);
+    console.log("counter", counter);
 
     return result;
   };
 
-  console.log(collectFruits([1,1,3,4,5,1]));
+  console.log(collectFruits([1,3,3,4,5,1]));
 
 
   function maxSumByDays(arr: number[], d: number) {
