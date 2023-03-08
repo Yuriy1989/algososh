@@ -62,25 +62,11 @@ export const StringComponent: FC = () => {
 
   // console.log(lengthOfLongestSubstring("q12q234y323"));
 
-  interface ICounter {
-    [key: string]: number
-  }
-
-  // interface icer {
-  //   [key: string]: string
-  // }
-
-  // let cer:icer = {
-  //   "name": "Yura"
-  // }
-  // cer["sername"] = "Dudin";
-  // cer.sernames = "Dudin";
-  // console.log("cer", cer);
-
   function collectFruits(fruits: number[]): number {
     const BASKET_COUNT = 2;
-    let result = 0;
-    let counter: ICounter = {};
+    let counter: {[key: string]: number} = {};
+    let maxCount: number = 0;
+    let currentCount: number = 0;
     for (let i = 0; i < fruits.length; i++) {
       let currentSum = 0;
       for(let j = 0; j < fruits.length; j++) {
@@ -91,12 +77,25 @@ export const StringComponent: FC = () => {
         }
       }
     }
-    console.log("counter", counter);
+    const objKeys = Object.keys(counter);
+    console.log("objKeys", objKeys.length);
 
-    return result;
+    for (let i = 0; i < BASKET_COUNT ; i++) {
+      currentCount += counter[objKeys[i]];
+    }
+    console.log("currentCount= ", currentCount);
+
+    for ( let i = BASKET_COUNT; i < objKeys.length; i++) {
+      currentCount +=  counter[objKeys[i]] - counter[objKeys[i-BASKET_COUNT]];
+      maxCount = Math.max(currentCount, maxCount);
+      console.log("key =", objKeys[i], "counter[key]", counter[objKeys[i]], "key =", objKeys[i-BASKET_COUNT], "counter[key]", counter[objKeys[i-BASKET_COUNT]], "maxCount = " , maxCount);
+    }
+    console.log("counter", counter, "maxCount = ", maxCount);
+
+    return maxCount;
   };
 
-  console.log(collectFruits([1,3,3,4,5,1]));
+  // console.log(collectFruits([0,1,2,3,2,2,2]));
 
 
   function maxSumByDays(arr: number[], d: number) {
@@ -120,6 +119,82 @@ export const StringComponent: FC = () => {
   const days = [100, 200, 400, 700, 100, 300];
 
   // console.log(maxSumByDays(days, 2));
+
+  class Heap {
+    heap: number[] = [];
+
+    siftUp = (index: number) => {
+      const getParentIndex = (nodeIndex: number): number => ~~((nodeIndex - 1) / 2);
+
+      let parent = getParentIndex(index);
+      while (index > 0 && this.heap[index] < this.heap[parent]) {
+        [this.heap[index], this.heap[parent]] = [this.heap[parent], this.heap[index]];
+        index = parent;
+        parent = getParentIndex(index);
+      }
+    }
+
+    swap(index1: number, index2: number) {
+      [this.heap[index1], this.heap[index2]] = [this.heap[index2], this.heap[index1]];
+    }
+
+    siftDown = (i: number) => {
+      const getLeft = (nodeIndex: number): number => 2 * nodeIndex + 1;
+      const getRight = (nodeIndex: number): number => 2 * nodeIndex + 2;
+
+      let left = getLeft(i)
+      let right = getRight(i)
+
+      while ((left < this.heap.length && this.heap[i] > this.heap[left]) || (right < this.heap.length && this.heap[i] > this.heap[right])) {
+        let smallest = right;
+        if (right >= this.heap.length || this.heap[left] < this.heap[right]) {
+          smallest = left;
+        }
+        this.swap(i, smallest)
+        i = smallest;
+        left = getLeft(i);
+        right = getRight(i);
+      }
+    }
+
+    insert = (item: number) => {
+      this.heap.push(item);
+      this.siftUp(this.heap.length - 1);
+    }
+
+    getMin = (): number | null => this.heap.length >= 0 ? this.heap[0] : null;
+
+    extract = (): number => {
+      const minValue = this.heap[0];
+      this.heap[0] = this.heap[this.heap.length - 1];
+      this.heap.pop();
+      this.siftDown(0);
+      return minValue;
+    }
+
+    build = (sourceArray: number[]) => {
+      this.heap = sourceArray;
+      const startIdx = Math.floor(sourceArray.length / 2) - 1;
+      for (let i = startIdx; i >= 0; i--) {
+        this.siftDown(i);
+      }
+    }
+
+    update = (ind: number) => {
+      // ...
+    }
+  }
+
+  const heap = new Heap();
+  heap.build([12, 1, 10, 11, 30, 3, -3])
+
+
+  console.log(heap.getMin()) // -3
+  heap.update(0)
+  console.log(heap.getMin()) // 1
+
+
+
 
   return (
     <SolutionLayout title="Строка">
