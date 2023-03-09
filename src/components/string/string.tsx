@@ -131,6 +131,7 @@ export const StringComponent: FC = () => {
       const getParentIndex = (nodeIndex: number): number => ~~((nodeIndex - 1) / 2);
 
       let parent = getParentIndex(index);
+      console.log("getParentIndex", parent, "this.heap[index]", this.heap[index], "this.heap[parent]", this.heap[parent]);
       while (index > 0 && this.heap[index] < this.heap[parent]) {
         [this.heap[index], this.heap[parent]] = [this.heap[parent], this.heap[index]];
         index = parent;
@@ -196,9 +197,14 @@ export const StringComponent: FC = () => {
   console.log(heap.extract());
   console.log(heap.getMin());
   heap.getHeap();
+  heap.siftUp(3);
   // console.log(heap.getMin()) // -3
   // heap.update(0)
   // console.log(heap.getMin()) // 1
+  // Node: i
+  // Left child: 2i + 1
+  // Right child: 2i + 2
+  // Parent: (i - 1)/2
 
 
 
