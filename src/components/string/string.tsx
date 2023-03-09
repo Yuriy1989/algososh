@@ -123,6 +123,10 @@ export const StringComponent: FC = () => {
   class Heap {
     heap: number[] = [];
 
+    getHeap = () => {
+      console.log("heap", this.heap, "heap.length", this.heap.length);
+    }
+
     siftUp = (index: number) => {
       const getParentIndex = (nodeIndex: number): number => ~~((nodeIndex - 1) / 2);
 
@@ -186,12 +190,15 @@ export const StringComponent: FC = () => {
   }
 
   const heap = new Heap();
-  heap.build([12, 1, 10, 11, 30, 3, -3])
+  heap.build([12, 1, 10, 11, 30, 3, -4])
 
-
-  console.log(heap.getMin()) // -3
-  heap.update(0)
-  console.log(heap.getMin()) // 1
+  heap.getHeap();
+  console.log(heap.extract());
+  console.log(heap.getMin());
+  heap.getHeap();
+  // console.log(heap.getMin()) // -3
+  // heap.update(0)
+  // console.log(heap.getMin()) // 1
 
 
 
