@@ -206,7 +206,45 @@ export const StringComponent: FC = () => {
   // Right child: 2i + 2
   // Parent: (i - 1)/2
 
+  // function sum(a, b) {
+  //   return a + b
+  // }
 
+  // function result(fn, ...item) {
+  //   console.log("item", );
+  //   return "Result: " + fn(item[0], item[1]);
+  // }
+
+  // console.log(result(sum, 2, 3));
+
+  // function sum (c) {
+  //   return(a) => {
+  //     return(b) => {
+  //       return c + a + b
+  //     }
+  //   }
+  // }
+
+  // console.log(sum(1)(2)(3));
+
+  const value = {
+    name: 'Alex',
+    age: 18,
+  }
+
+  function changeName(name, data) {
+    console.log("data", data);
+    return {
+      ...data,
+      name: data.name = name,
+    }
+  }
+
+  console.log(changeName('Jhon', value));
+
+  console.log(value === changeName('Jhon', value)) // true
+
+  console.log("value", value);
 
 
   return (
