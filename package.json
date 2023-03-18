@@ -43,7 +43,7 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/react": "^12.1.5",
     "@types/react-router-dom": "^5.3.3",
     "cypress": "^12.7.0",
     "fetch-mock": "^9.11.0",

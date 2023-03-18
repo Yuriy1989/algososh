@@ -227,24 +227,24 @@ export const StringComponent: FC = () => {
 
   // console.log(sum(1)(2)(3));
 
-  const value = {
-    name: 'Alex',
-    age: 18,
-  }
+  // const value = {
+  //   name: 'Alex',
+  //   age: 18,
+  // }
 
-  function changeName(name, data) {
-    console.log("data", data);
-    return {
-      ...data,
-      name: data.name = name,
-    }
-  }
+  // function changeName(name, data) {
+  //   console.log("data", data);
+  //   return {
+  //     ...data,
+  //     name: data.name = name,
+  //   }
+  // }
 
-  console.log(changeName('Jhon', value));
+  // console.log(changeName('Jhon', value));
 
-  console.log(value === changeName('Jhon', value)) // true
+  // console.log(value === changeName('Jhon', value)) // true
 
-  console.log("value", value);
+  // console.log("value", value);
 
 
   return (
