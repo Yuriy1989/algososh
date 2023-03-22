@@ -48,10 +48,6 @@ export const StringComponent: FC = () => {
     setValues({ text: '' });
   }, [steps, list])
 
-  if(!values.text) {
-    console.log('123');
-  }
-
   return (
     <SolutionLayout title="Строка">
       <div className={string.string}>

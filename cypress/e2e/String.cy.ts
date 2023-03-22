@@ -14,7 +14,12 @@ describe('Строка', () => {
     cy.get('input[name="text"]').should('have.value', '')
     cy.get('button[type="submit"]').should('be.disabled')
 
-    cy.get('div').should('have.class', /text_/)
-    expect('div').to.match(/text_/)
+    const t = cy.get('*[class^="circle_circle"]')
+    console.log("tttttt = ", t)
+    t.each((item, index) => {
+      console.log("item = ", item)
+      item[0].contains('circle_default')
+      cy.get('item[0]').contains('have.class', 'circle_default')
+    })
   })
 })
