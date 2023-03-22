@@ -13,10 +13,17 @@ import { MEAN_MAX_LENGTH_STRING } from "../../constants/input";
 
 export const StringComponent: FC = () => {
 
-  const {values, handleChange} = useForm({text: ''});
+  const {values, setValues} = useForm({text: ''});
   const [list, setList] = useState<Array<ISteps> | null>(null);
   const [steps, setSteps] = useState<number>(0);
   const [button, setButton] = useState<boolean>(false);
+
+  const handleChange = (e: {
+    target: any; preventDefault: () => void;
+  }) => {
+    const { name, value} = e.target;
+    setValues( { ...values, [name]: value} );
+  }
 
   const handleClick = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -38,7 +45,12 @@ export const StringComponent: FC = () => {
     setTimeout(() => {
       setSteps(steps+1);
     }, DELAY_IN_MS);
+    setValues({ text: '' });
   }, [steps, list])
+
+  if(!values.text) {
+    console.log('123');
+  }
 
   return (
     <SolutionLayout title="Строка">
@@ -46,7 +58,7 @@ export const StringComponent: FC = () => {
         <form className={string.form} onSubmit={handleClick}>
           <div className={string.input}>
             <Input
-              name={'text'}
+              name='text'
               onChange={handleChange}
               value={`${values.text}`}
               placeholder={'Введите текст'}
@@ -54,7 +66,7 @@ export const StringComponent: FC = () => {
             />
             <span>Максимум - {MEAN_MAX_LENGTH_STRING} символов</span>
           </div>
-          <Button isLoader={button} type="submit" text="Развернуть" />
+          <Button disabled={!values.text ? true : false} isLoader={button} type="submit" text="Развернуть" />
         </form>
         {list &&
           <div className={string.circle}>
