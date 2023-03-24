@@ -26,21 +26,30 @@ describe('Строка', () => {
 
     let i = 0;
     while (i < newMas.length) {
+
       const elements = cy.get('*[class^="circle_circle"]')
       elements.each((item, index) => {
-        // if (index === newMas[i].)
-        console.log("index", index);
-        cy.wrap(item)
-          .invoke('attr', 'class')
-          .then(classList => expect(classList).contains('circle_default'))
+        console.log("index", index)
+        if (newMas[i]?.changing || newMas[i]?.modified) {
+          if (newMas[i].changing?.indexOf(index)) {
+            cy.wrap(item)
+              .invoke('attr', 'class')
+              .then(classList => expect(classList).contains('circle_changing'))
+          }
+          if (newMas[i].modified?.indexOf(index)) {
+            cy.wrap(item)
+              .invoke('attr', 'class')
+              .then(classList => expect(classList).contains('circle_modified'))
+          }
+          if (newMas[i].default?.indexOf(index)) {
+            cy.wrap(item)
+              .invoke('attr', 'class')
+              .then(classList => expect(classList).contains('circle_default'))
+          }
+        }
       })
 
-      // elements.each((item) => {
-      //   cy.wrap(item)
-      //   .invoke('attr', 'class')
-      //   .then(classList => expect(classList).contains('circle_default'))
-      // })
-      // cy.wait(DELAY_IN_MS)
+      cy.wait(DELAY_IN_MS)
 
       i++;
     }
