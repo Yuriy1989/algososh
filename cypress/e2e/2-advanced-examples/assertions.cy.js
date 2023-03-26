@@ -98,7 +98,7 @@ context('Assertions', () => {
 
           const className = $div[0].className
 
-          expect(className).to.match(/heading-/)
+          expect(className).to.match(/heading-/ )
         })
         // .then(cb) callback is not retried,
         // it either passes or fails

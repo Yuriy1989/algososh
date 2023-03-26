@@ -1,9 +1,6 @@
 import { DELAY_IN_MS } from '../../src/constants/delays';
-import { permutation } from "../../src/utils/algorithms/string";
 
-const stringTest = '12345';
-const newMas = permutation(stringTest.split(''));
-console.log("newMas", newMas);
+const stringTest:string = 'switch';
 
 describe('Строка', () => {
   beforeEach(() => {
@@ -16,60 +13,144 @@ describe('Строка', () => {
   })
 
   it('Проверьте, что строка разворачивается корректно', () => {
-    cy.get('input[name="text"]').type('12345').should('have.value', stringTest)
+    cy.get('input[name="text"]').type(stringTest).should('have.value', stringTest)
     cy.get('button[type="submit"]').click()
     cy.get('input[name="text"]').should('have.value', '')
     cy.get('button[type="submit"]').should('be.disabled')
 
-    // const elements = cy.get('*[class^="circle_circle"]')
-    // console.log("elements", elements);
+    cy.get('div[class^="circle_circle"]').should('have.length', stringTest.length)
 
-    let i = 0;
-    while (i < newMas.length) {
-
-      const elements = cy.get('*[class^="circle_circle"]')
-      elements.each((item, index) => {
-        console.log("index", index)
-        if (newMas[i]?.changing || newMas[i]?.modified) {
-          if (newMas[i].changing?.indexOf(index)) {
-            cy.wrap(item)
-              .invoke('attr', 'class')
-              .then(classList => expect(classList).contains('circle_changing'))
-          }
-          if (newMas[i].modified?.indexOf(index)) {
-            cy.wrap(item)
-              .invoke('attr', 'class')
-              .then(classList => expect(classList).contains('circle_modified'))
-          }
-          if (newMas[i].default?.indexOf(index)) {
-            cy.wrap(item)
-              .invoke('attr', 'class')
-              .then(classList => expect(classList).contains('circle_default'))
-          }
-        }
-      })
-
-      cy.wait(DELAY_IN_MS)
-
-      i++;
+    for (let i = 0; i < stringTest.length; i++) {
+      cy.get('div[class^="string_circle"]>div:nth-child(' + (i + 1) + ')').contains(stringTest[i])
+      cy.get('div[class^="string_circle"]>div:nth-child(' + (i + 1) + ')>div[class^="circle"]')
+        .invoke('attr', 'class')
+        .then(classList => expect(classList).contains('circle_default'))
     }
 
-    // elements.each((item) => {
-    //   cy.wrap(item)
-    //   .invoke('attr', 'class')
-		// 	.then(classList => expect(classList).contains('circle_default'))
-    // })
+    cy.wait(DELAY_IN_MS)
 
-    // cy.wait(DELAY_IN_MS)
+    cy.get('div[class^="string_circle"]>div:first-child').contains(stringTest[0])
+    cy.get('div[class^="string_circle"]>div:first-child>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_changing'))
 
-    // elements.each((item, index) => {
-    //   console.log("item" , item.length);
-    //   if(index === 0 || index === stringTest.length-1){
-    //     cy.wrap(item)
-    //     .invoke('attr', 'class')
-    //     .then(classList => expect(classList).contains('circle_changing'))
-    //   }
-    // })
+    for (let i = 2; i < stringTest.length-1; i++) {
+      cy.get('div[class^="string_circle"]>div:nth-child(' + (i + 1) + ')').contains(stringTest[i])
+      cy.get('div[class^="string_circle"]>div:nth-child(' + (i + 1) + ')>div[class^="circle"]')
+        .invoke('attr', 'class')
+        .then(classList => expect(classList).contains('circle_default'))
+    }
+
+    cy.get('div[class^="string_circle"]>div:last-child').contains(stringTest[stringTest.length-1])
+    cy.get('div[class^="string_circle"]>div:last-child>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_changing'))
+
+    cy.wait(DELAY_IN_MS)
+
+    //проверяем символы
+    cy.get('div[class^="string_circle"]>div:first-child').contains(stringTest[stringTest.length-1])
+    for (let i = 2; i < stringTest.length-2; i++) {
+      cy.get('div[class^="string_circle"]>div:nth-child(' + (i + 1) + ')').contains(stringTest[i])
+      cy.get('div[class^="string_circle"]>div:nth-child(' + (i + 1) + ')').contains(stringTest[i])
+      cy.get('div[class^="string_circle"]>div:nth-child(' + (i + 1) + ')').contains(stringTest[i])
+      cy.get('div[class^="string_circle"]>div:nth-child(' + (i + 1) + ')').contains(stringTest[i])
+    }
+    cy.get('div[class^="string_circle"]>div:last-child').contains(stringTest[0])
+
+    //проверяем классы
+    cy.get('div[class^="string_circle"]>div:nth-child(1)>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(2)>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_changing'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(3)>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_default'))
+    cy.get('div[class^="string_circle"]>div:nth-child(4)>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_default'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(' + (stringTest.length - 1) + ')>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_changing'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(' + (stringTest.length) + ')>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.wait(DELAY_IN_MS)
+
+    //проверяем символы
+    cy.get('div[class^="string_circle"]>div:first-child').contains(stringTest[stringTest.length-1])
+    cy.get('div[class^="string_circle"]>div:nth-child(2)').contains(stringTest[4])
+    cy.get('div[class^="string_circle"]>div:nth-child(3)').contains(stringTest[2])
+    cy.get('div[class^="string_circle"]>div:nth-child(4)').contains(stringTest[3])
+    cy.get('div[class^="string_circle"]>div:nth-child(5)').contains(stringTest[1])
+    cy.get('div[class^="string_circle"]>div:last-child').contains(stringTest[0])
+
+    //проверяем классы
+    cy.get('div[class^="string_circle"]>div:nth-child(1)>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(2)>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(3)>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_changing'))
+    cy.get('div[class^="string_circle"]>div:nth-child(4)>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_changing'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(' + (stringTest.length - 1) + ')>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(' + (stringTest.length) + ')>div[class^="circle"]')
+      .invoke('attr', 'class')
+      .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.wait(DELAY_IN_MS)
+
+    //проверяем символы
+    cy.get('div[class^="string_circle"]>div:first-child').contains(stringTest[stringTest.length-1])
+    cy.get('div[class^="string_circle"]>div:nth-child(2)').contains(stringTest[4])
+    cy.get('div[class^="string_circle"]>div:nth-child(3)').contains(stringTest[3])
+    cy.get('div[class^="string_circle"]>div:nth-child(4)').contains(stringTest[2])
+    cy.get('div[class^="string_circle"]>div:nth-child(5)').contains(stringTest[1])
+    cy.get('div[class^="string_circle"]>div:last-child').contains(stringTest[0])
+
+    //проверяем классы
+    cy.get('div[class^="string_circle"]>div:nth-child(1)>div[class^="circle"]')
+    .invoke('attr', 'class')
+    .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(2)>div[class^="circle"]')
+    .invoke('attr', 'class')
+    .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(3)>div[class^="circle"]')
+    .invoke('attr', 'class')
+    .then(classList => expect(classList).contains('circle_modified'))
+    cy.get('div[class^="string_circle"]>div:nth-child(4)>div[class^="circle"]')
+    .invoke('attr', 'class')
+    .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(' + (stringTest.length - 1) + ')>div[class^="circle"]')
+    .invoke('attr', 'class')
+    .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.get('div[class^="string_circle"]>div:nth-child(' + (stringTest.length) + ')>div[class^="circle"]')
+    .invoke('attr', 'class')
+    .then(classList => expect(classList).contains('circle_modified'))
+
+    cy.wait(DELAY_IN_MS)
 
   })
 })

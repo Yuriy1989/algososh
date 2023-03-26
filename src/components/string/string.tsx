@@ -21,7 +21,7 @@ export const StringComponent: FC = () => {
   const handleChange = (e: {
     target: any; preventDefault: () => void;
   }) => {
-    const { name, value} = e.target;
+    const { name, value } = e.target;
     setValues( { ...values, [name]: value} );
   }
 
