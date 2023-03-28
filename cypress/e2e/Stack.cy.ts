@@ -54,9 +54,14 @@ describe('Стек', () => {
   it('Проверка поведение кнопки «Очистить». Добавление в стек несколько элементов, а по нажатию на кнопку «Очистить» длина стека должна быть равна 0.', () => {
     cy.get('input[name="text"]').type(stringTest_1).should('have.value', stringTest_1)
     cy.get('div[class^="stack_button"]>button:first-child').click();
-    cy.get('div[class^="stack_button"]>button:nth-child(2)').click();
-    cy.get('div[class^="circle_content"]').should('not.exist')
+    cy.get('input[name="text"]').type(stringTest_2).should('have.value', stringTest_2)
+    cy.get('div[class^="stack_button"]>button:first-child').click();
     cy.wait(SHORT_DELAY_IN_MS)
+    cy.get('button[type="reset"]').click();
+    cy.get('div[class^="stack_button"]>button:first-child').should('be.disabled')
+    cy.get('div[class^="stack_button"]>button:nth-child(2)').should('be.disabled')
+    cy.get('button[type="reset"]').should('be.disabled')
+    cy.get('div[class^="circle_content"]').should('not.exist')
   })
 
 })
