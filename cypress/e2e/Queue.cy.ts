@@ -1,7 +1,7 @@
 import { SHORT_DELAY_IN_MS } from '../../src/constants/delays';
 
-const stringTest_1 = "test"
-const stringTest_2 = "tset"
+const stringTestOne: string = "test"
+const stringTestTwo: string = "tset"
 
 describe('Очередь', () => {
   beforeEach('', () => {
@@ -14,30 +14,30 @@ describe('Очередь', () => {
   })
 
   it('Проверка, правильность добавления элемента в очередь. Курсоры head и tail отрисовываются корректно.', () => {
-    cy.get('input[name="text"]').type(stringTest_1).should('have.value', stringTest_1)
+    cy.get('input[name="text"]').type(stringTestOne).should('have.value', stringTestOne)
     cy.get('div[class^="queue_button"]>button:first-child').click()
 
     cy.wait(SHORT_DELAY_IN_MS);
     cy.get('div[class^="queue_circle"]>div:first-child').contains('head')
     cy.get('div[class^="queue_circle"]>div:first-child').contains('tail');
-    cy.get('div[class^="queue_circle"]>div:first-child').contains(stringTest_1);
-    cy.get('input[name="text"]').type(stringTest_2).should('have.value', stringTest_2)
+    cy.get('div[class^="queue_circle"]>div:first-child').contains(stringTestOne);
+    cy.get('input[name="text"]').type(stringTestTwo).should('have.value', stringTestTwo)
     cy.get('div[class^="queue_button"]>button:first-child').click()
 
     cy.wait(SHORT_DELAY_IN_MS);
     cy.get('div[class^="queue_circle"]>div:first-child').contains('head')
     cy.get('div[class^="queue_circle"]>div:first-child>div:nth-child(4)').should('be.empty')
-    cy.get('div[class^="queue_circle"]>div:first-child').contains(stringTest_1);
+    cy.get('div[class^="queue_circle"]>div:first-child').contains(stringTestOne);
     cy.get('div[class^="queue_circle"]>div:nth-child(2)>div:first-child').should('be.empty')
     cy.get('div[class^="queue_circle"]>div:nth-child(2)').contains('tail');
-    cy.get('div[class^="queue_circle"]>div:nth-child(2)').contains(stringTest_2);
+    cy.get('div[class^="queue_circle"]>div:nth-child(2)').contains(stringTestTwo);
   })
 
   it('Проверка правильности удаления элемента из очереди.', () => {
-    cy.get('input[name="text"]').type(stringTest_1).should('have.value', stringTest_1)
+    cy.get('input[name="text"]').type(stringTestOne).should('have.value', stringTestOne)
     cy.get('div[class^="queue_button"]>button:first-child').click()
     cy.wait(SHORT_DELAY_IN_MS);
-    cy.get('input[name="text"]').type(stringTest_2).should('have.value', stringTest_2)
+    cy.get('input[name="text"]').type(stringTestTwo).should('have.value', stringTestTwo)
     cy.get('div[class^="queue_button"]>button:first-child').click()
     cy.wait(SHORT_DELAY_IN_MS);
 
@@ -49,14 +49,14 @@ describe('Очередь', () => {
 
     cy.get('div[class^="queue_circle"]>div:nth-child(2)').contains('head');
     cy.get('div[class^="queue_circle"]>div:nth-child(2)').contains('tail');
-    cy.get('div[class^="queue_circle"]>div:nth-child(2)').contains(stringTest_2);
+    cy.get('div[class^="queue_circle"]>div:nth-child(2)').contains(stringTestTwo);
   })
 
   it('Проверка поведение кнопки «Очистить».', () => {
-    cy.get('input[name="text"]').type(stringTest_1).should('have.value', stringTest_1)
+    cy.get('input[name="text"]').type(stringTestOne).should('have.value', stringTestOne)
     cy.get('div[class^="queue_button"]>button:first-child').click()
     cy.wait(SHORT_DELAY_IN_MS);
-    cy.get('input[name="text"]').type(stringTest_2).should('have.value', stringTest_2)
+    cy.get('input[name="text"]').type(stringTestTwo).should('have.value', stringTestTwo)
     cy.get('div[class^="queue_button"]>button:first-child').click()
     cy.wait(SHORT_DELAY_IN_MS);
 
@@ -68,5 +68,5 @@ describe('Очередь', () => {
       cy.get('div[class^="queue_circle"]>div:nth-child('+i+')>div:nth-child(2)>p').should('be.empty')
     }
   })
-  
+
 })
