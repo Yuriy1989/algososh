@@ -17,6 +17,7 @@ const {values, setValues} = useForm({text: ''});
 const [list, setList] = useState<Array<IStackSteps<String>> | null>(null);
 const [steps, setSteps] = useState<number>(0);
 const [loader, serLoader] = useState<ILoader>({state: false, task: null});
+console.log("list", list);
 
 const onButtonActive = (e: {
   target: any; preventDefault: () => void;
@@ -43,12 +44,12 @@ const handleClickPush = () => {
 }
 
 const handleClickPop = () => {
-  setList(null);
-  setSteps(0);
   const size = newStack.getSize();
   if(size) {
     setList(newStack.pop());
   }
+  setList(null);
+  setSteps(0);
   serLoader({ state: true, task: Task.Pop })
 }
 

@@ -13,11 +13,18 @@ import { PATTERN_FIBONACCI } from "../../constants/pattern";
 
 export const FibonacciPage: React.FC = () => {
 
-  const {values, handleChange} = useForm({numbers: 0});
+  const {values, setValues} = useForm({numbers: null});
   const [list, setList] = useState<Array<number> | null>(null);
   const [steps, setSteps] = useState<number>(0);
   const [button, setButton] = useState<boolean>(false);
   const [numb, setNumb] = useState<Array<number>>([]);
+
+  const handleChange = (e: {
+    target: any; preventDefault: () => void;
+  }) => {
+    const { name, value } = e.target;
+    setValues( { ...values, [name]: value} );
+  }
 
   const handleClick = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -42,6 +49,7 @@ export const FibonacciPage: React.FC = () => {
         setNumb(list.slice(0, steps));
       }
     }, SHORT_DELAY_IN_MS);
+    setValues({ numbers: null });
   }, [steps, list])
 
   return (
@@ -59,7 +67,7 @@ export const FibonacciPage: React.FC = () => {
             />
             <span>Максимальное число - {MAX_LENGTH_STRING}</span>
           </div>
-          <Button isLoader={button} type="submit" text="Рассчитать" />
+          <Button disabled={!values.numbers ? true : false} isLoader={button} type="submit" text="Рассчитать" />
         </form>
         {list &&
           <div className={fibonacci.circle}>

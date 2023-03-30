@@ -158,3 +158,7 @@ import { ILinkedList } from "../../types/types";
   }
 
   export const listAlg = new LinkedList<string | number>();
+  listAlg.append(0);
+  listAlg.append(34);
+  listAlg.append(8);
+  listAlg.append(1);

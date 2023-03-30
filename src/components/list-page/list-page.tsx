@@ -391,10 +391,6 @@ export const ListPage: React.FC = () => {
   }
 
   useEffect(() => {
-    listAlg.append(0);
-    listAlg.append(34);
-    listAlg.append(8);
-    listAlg.append(1);
     getElements();
     setSteps(false);
   }, [])
